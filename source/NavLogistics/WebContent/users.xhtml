@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Users" outcome="users"/>
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button" rendered="#{currentUser.role.name == 'Administrator'}"/>
+	</td></tr>
+	</table>
+
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{userBean.users}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available users
+		</f:facet>
+		
+		<p:column sortBy="#{obj.username}" headerText="User name" filterBy="#{obj.username}" filterMatchMode="contains">
+			<h:outputText value="#{obj.username}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.firstname}" headerText="First name" filterBy="#{obj.firstname}" filterMatchMode="contains">
+			<h:outputText value="#{obj.firstname}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.lastname}" headerText="Last name" filterBy="#{obj.lastname}" filterMatchMode="contains">
+			<h:outputText value="#{obj.lastname}" />
+		</p:column>
+		
+		<p:column headerText="Phone">
+			<h:outputText value="#{obj.phone}" />
+		</p:column>
+		
+		<p:column headerText="Email">
+			<h:outputText value="#{obj.email}" />
+		</p:column>
+		
+		<p:column headerText="Type">
+			<h:outputText value="#{obj.role.type}" />
+		</p:column>
+		
+		<p:column headerText="Role">
+			<h:outputText value="#{obj.role.name}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<!-- rendered="#{currentUser.role.name == 'Administrator'}" -->
+			<p:commandLink ajax="false" onclick="alert('Under Construction!');return false;" style="margin:0"
+				rendered="#{currentUser.role.name == 'Administrator'}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New User" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="ursuname" value="#{bundles.messages.home_usernameLabel}: *" />
+  		<p:inputText id="ursuname" value="#{userBean.userObj.username}" required="true" />
+  		
+  		<h:outputLabel for="urspwd" value="#{bundles.messages.home_passwordLabel}: *" />
+  		<p:password id="urspwd" value="#{userBean.userObj.password}" required="true" />
+  		
+  		<h:outputLabel for="urscpwd" value="#{bundles.messages.cpasswordLabel}: " />
+  		<p:password id="urscpwd" value="#{userBean.conPassword}" required="true" />
+  		
+  		<h:outputLabel for="ursfname" value="#{bundles.messages.fnameLabel}:" />
+  		<p:inputText id="ursfname" value="#{userBean.userObj.firstname}" />
+  		
+  		<h:outputLabel for="urslname" value="#{bundles.messages.lnameLabel}:" />
+  		<p:inputText id="urslname" value="#{userBean.userObj.lastname}" />
+  		
+  		<h:outputLabel for="ursdesig" value="#{bundles.messages.desigLabel}:" />
+  		<p:inputText id="ursdesig" value="#{userBean.userObj.designation}" />
+  		
+  		<h:outputLabel for="ursphone" value="#{bundles.messages.phoneLabel}:" />
+  		<p:inputText id="ursphone" value="#{userBean.userObj.phone}" />
+  		
+  		<h:outputLabel for="ursemail" value="#{bundles.messages.emailLabel}:" />
+  		<p:inputText id="ursemail" value="#{userBean.userObj.email}" />
+  		
+  		<h:outputLabel for="usrtype" value="#{bundles.messages.typeLabel}:" />
+  		<p:selectOneMenu id="usrtype" value="#{userBean.type}">
+  			<f:selectItem itemLabel="" itemValue="" />
+  			<f:selectItems value="#{dropdownBean.userTypes}" />
+  			<p:ajax update="usrrole,usrentity" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="usrrole" value="#{bundles.messages.roleLabel}:" />
+  		<p:selectOneMenu id="usrrole" value="#{userBean.role_id}">
+  			<f:selectItems value="#{dropdownBean.getUserRolesByType(userBean.type)}" />
+  			<p:ajax update="usrentity" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="usrentity" value="#{bundles.messages.entityLabel}:" />
+  		<p:panelGrid id="usrentity" columns="2" cellpadding="5" style="margin-bottom:10px;">
+  			<h:outputLabel for="usrship" value="#{bundles.messages.shipLabel}:" rendered="#{userBean.type == 'Ship'}" />
+	  		<p:selectOneMenu id="usrship" value="#{userBean.ship_id}" rendered="#{userBean.type == 'Ship'}">
+	  			<f:selectItems value="#{dropdownBean.ships}" var="shp" itemLabel="#{shp.name}" itemValue="#{shp.id}" />
+	  		</p:selectOneMenu>
+	  		
+	  		<h:outputLabel for="usrwarehouse" value="#{bundles.messages.warehouseLabel}:" rendered="#{userBean.type == 'Warehouse'}" />
+	  		<p:selectOneMenu id="usrwarehouse" value="#{userBean.warehouse_id}" rendered="#{userBean.type == 'Warehouse'}">
+	  			<f:selectItems value="#{dropdownBean.allWarehouses}" var="wrh" itemLabel="#{wrh.name}" itemValue="#{wrh.id}" />
+	  		</p:selectOneMenu>
+	  		
+	  		<h:outputText value="No need for entity" rendered="#{userBean.type == 'Global'}" />
+  		</p:panelGrid>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" action="#{userBean.Save}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,419 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+<!-- Header -->
+<div id="header" class="wrapper">
+    <div class="logo"><h3>Candidate Bio Data Form</h3><!-- <a href="/" title=""><img src="images/loginLogo2.png" alt="" /></a> --></div>
+    <div class="middleNav">
+    	<ul>
+    		<li><img src="images/nxz-logo.jpg" alt="" /></li>
+    	</ul>
+    </div>
+    <div class="fix"></div>
+</div>
+
+
+<!-- Content wrapper -->
+<div class="wrapper">
+	
+	<!-- Left navigation -->
+    <div class="leftNav">
+    	<ul id="menu">
+        	<li class="dash"><a href="dashboard.seam" title="Dashboard"><span>Dashboard</span></a></li>
+            <li class="forms"><a href="fill-form.seam" title="Fill the recruitment form" class="active"><span>Bio-data Form</span></a></li>
+		</ul>
+	</div>
+	
+	<!-- Content -->
+    <div class="content">
+    	<div class="title"><h5>Bio-data Form</h5></div>
+    	<h:form>
+    		<span class="errors">
+               <strong><font color="red"><h:messages errorClass="error" styleClass="messages" id="messages" globalOnly="true"/></font></strong>
+               <br/>
+               <strong>Note: The closing date is now extended to <font color="red">31 March, 2013</font>. If you have any troble updating your profile, please send an email to okerevictor@gmail.com. Thank you.</strong>
+               <br/> 
+            </span>
+    		<fieldset>
+    			<div class="widget first">
+                    <div class="head"><h5 class="iList">Account details</h5></div>
+   					<div class="rowElem">
+					<h:outputLabel for="tstid" value="Test ID*"/>
+					<div class="formRight">
+						<h:inputText id="tstid" value="#{userProfile.testid}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" readonly="true">
+							<rich:validator />
+						</h:inputText>
+					</div>
+					<div class="fix"><rich:message for="tstid" style="color: red;"/></div>
+					</div>
+				</div>
+    		</fieldset>
+    		<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Personal details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="fname" value="First name*"/>
+						<div class="formRight">
+							<h:inputText id="fname" value="#{userProfile.firstname}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="fname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mname" value="Middle name"/>
+						<div class="formRight">
+							<h:inputText id="mname" value="#{userProfile.middlename}" style="width:175px;height:20px;font-size:12px;">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="mname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="lname" value="Last name*"/>
+						<div class="formRight">
+							<h:inputText id="lname" value="#{userProfile.lastname}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="lname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="dob" value="Date of birth*"/>
+						<div class="formRight">
+							<rich:calendar id="dob" value="#{userProfile.dateofbirth}" style="height:20px;font-size:12px;" locale="us" datePattern="yyyy-MM-dd" required="true">
+								<rich:validator />
+							</rich:calendar>
+						</div>
+						<div class="fix"><rich:message for="dob" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="gender" value="Gender*"/>
+						<div class="formRight">
+							<h:selectOneMenu id="gender" value="#{userProfile.gender}" style="height:20px;font-size:12px;" required="true" defaultLabel="Select a gender...">
+								<f:selectItem itemValue="Male" itemLabel="Male" />
+								<f:selectItem itemValue="Female" itemLabel="Female" />
+							</h:selectOneMenu>
+						</div>
+						<div class="fix"><rich:message for="gender" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="sog" value="State of origin*"/>
+						<div class="formRight">
+							<h:selectOneMenu id="sog" value="#{registrar.sog_id}" style="height:20px;font-size:12px;" required="true" defaultLabel="Select state...">
+								<f:selectItem itemValue="0" itemLabel="" />
+								<f:selectItems value="#{dropdown.states}" />
+								<a4j:ajax event="valueChange" render="logPanel" />
+							</h:selectOneMenu>
+						</div>
+						<div class="fix"><rich:message for="sog" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="log" value="Local government area of origin*"/>
+						<div class="formRight">
+							<a4j:outputPanel id="logPanel">
+							<h:selectOneMenu id="log" value="#{registrar.lgaog_id}" style="height:20px;font-size:12px;" required="true" defaultLabel="Select LGA...">
+								<f:selectItem itemValue="0" itemLabel="" />
+								<f:selectItems value="#{dropdown.getLocalGovtAreas(registrar.sog_id)}" />
+							</h:selectOneMenu>
+							</a4j:outputPanel>
+						</div>
+						<div class="fix"><rich:message for="log" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">NYSC details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="nyscyr" value="Graduation year*"/>
+						<div class="formRight">
+							<h:inputText id="nyscyr" value="#{userProfile.nyscyear}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="nyscyr" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="nyscnumber" value="Discharge number*"/>
+						<div class="formRight">
+							<h:inputText id="nyscnumber" value="#{userProfile.nyscnumber}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="nyscnumber" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<a4j:region id="qualificationsPanel">
+			<a4j:outputPanel id="quaP">
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Education details (NOTE: Insert the most recent first!)</h5></div>
+                    <div class="rowElem noborder">
+                    	<rich:dataTable id="quals" width="700" var="obj" value="#{registrar.eduQualificationsList}" iterationStatusVar="it">
+        					<f:facet name="header"></f:facet>
+        					<rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="School" />
+				                </f:facet>
+				                <h:outputText value="#{obj.schoolname}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Qualification" />
+				                </f:facet>
+				                <h:outputText value="#{obj.qualification}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Year of graduation" />
+				                </f:facet>
+				                <h:outputText value="#{obj.gradyr}" />
+				            </rich:column>
+				            <rich:column>
+				                <a4j:commandLink styleClass="no-decor" execute="@this" render="@none"
+				                    oncomplete="#{rich:component('confirmPane')}.show()">
+				                    <h:graphicImage value="/images/icons/delete.gif" alt="delete" />
+				                    <a4j:param value="#{it.index}" assignTo="#{registrar.currentQIndex}" />
+				                </a4j:commandLink>
+							</rich:column>
+        				</rich:dataTable>
+                    </div>
+                    <div class="rowElem noborder">
+						<h:outputLabel for="schoolname" value="School"/>
+						<div class="formRight">
+							<h:inputText id="schoolname" value="#{registrar.eduQualification.schoolname}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="schoolname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="qualification" value="Qualification"/>
+						<div class="formRight">
+							<h:inputText id="qualification" value="#{registrar.eduQualification.qualification}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="qualification" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="gradyr" value="Year of graduation"/>
+						<div class="formRight">
+							<h:inputText id="gradyr" value="#{registrar.eduQualification.gradyr}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="gradyr" style="color: red;"/></div>
+					</div>
+				</div>
+				<div class="fix"><br/><br/></div>
+				<div class="submitForm"><a4j:commandButton action="#{registrar.AddQualification}" render="quaP,quals" value="ADD QUALIFICATION" styleClass="redBtn" /></div>
+			</fieldset>
+			</a4j:outputPanel>
+			</a4j:region>
+			
+			<a4j:region id="employmentsPanel">
+			<a4j:outputPanel id="empP">
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Employment details (NOTE: Insert the most recent first!)</h5></div>
+                    <div class="rowElem noborder">
+                    	<rich:dataTable id="employs" width="700" var="obj" value="#{registrar.employmentList}" iterationStatusVar="it">
+        					<f:facet name="header"></f:facet>
+        					<rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Employer" />
+				                </f:facet>
+				                <h:outputText value="#{obj.employer}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Salary" />
+				                </f:facet>
+				                <h:outputText value="#{obj.salary}" />
+				            </rich:column>
+				            <rich:column>
+				                <a4j:commandLink styleClass="no-decor" execute="@this" render="@none"
+				                    oncomplete="#{rich:component('confirmPane2')}.show()">
+				                    <h:graphicImage value="/images/icons/delete.gif" alt="delete" />
+				                    <a4j:param value="#{it.index}" assignTo="#{registrar.currentQIndex}" />
+				                </a4j:commandLink>
+							</rich:column>
+        				</rich:dataTable>
+                    </div>
+                    <div class="rowElem noborder">
+						<h:outputLabel for="employer" value="Employer"/>
+						<div class="formRight">
+							<h:inputText id="employer" value="#{registrar.employment.employer}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="employer" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="salary" value="Salary"/>
+						<div class="formRight">
+							<h:inputText id="salary" value="#{registrar.employment.salary}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="salary" style="color: red;"/></div>
+					</div>
+				</div>
+				<div class="fix"><br/><br/></div>
+				<div class="submitForm"><a4j:commandButton action="#{registrar.AddEmployment}" render="empP,employs" value="ADD EMPLOYMENT" styleClass="redBtn" /></div>
+			</fieldset>
+			</a4j:outputPanel>
+			</a4j:region>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Experience details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="yearsofexp" value="Years of post NYSC experience"/>
+						<div class="formRight">
+							<h:inputText id="yearsofexp" value="#{userProfile.yearsofexp}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="yearsofexp" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Contact details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="address" value="Address*"/>
+						<div class="formRight">
+							<h:inputText id="address" value="#{userProfile.address}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="address" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="city" value="City"/>
+						<div class="formRight">
+							<h:inputText id="city" value="#{userProfile.city}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="city" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="addrst" value="State*"/>
+						<div class="formRight">
+							<h:selectOneMenu id="addrst" value="#{registrar.addrst_id}" style="height:20px;font-size:12px;" required="true" defaultLabel="Select state...">
+								<f:selectItem itemValue="0" itemLabel="" />
+								<f:selectItems value="#{dropdown.states}" />
+								<a4j:ajax event="valueChange" render="addrlgPanel" />
+							</h:selectOneMenu>
+						</div>
+						<div class="fix"><rich:message for="addrst" style="color: red;"/></div>
+					</div>
+					<!-- <div class="rowElem">
+						<h:outputLabel for="addrlg" value="Local government area*"/>
+						<div class="formRight">
+							<a4j:outputPanel id="addrlgPanel">
+							<h:selectOneMenu id="addrlg" value="#{registrar.addrlg_id}" style="height:20px;font-size:12px;" required="true" defaultLabel="Select LGA...">
+								<f:selectItem itemValue="0" itemLabel="" />
+								<f:selectItems value="#{dropdown.getLocalGovtAreas(registrar.addrst_id)}" />
+							</h:selectOneMenu>
+							</a4j:outputPanel>
+						</div>
+						<div class="fix"><rich:message for="addrlg" style="color: red;"/></div>
+					</div> -->
+					<div class="rowElem">
+						<h:outputLabel for="email" value="Email"/>
+						<div class="formRight">
+							<h:inputText id="email" value="#{userProfile.email}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="email" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mobile1" value="Mobile number 1*"/>
+						<div class="formRight">
+							<h:inputText id="mobile1" value="#{userProfile.mobileno1}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]" required="true">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="mobile1" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mobile2" value="Mobile number 2"/>
+						<div class="formRight">
+							<h:inputText id="mobile2" value="#{userProfile.mobileno2}" style="width:175px;height:20px;font-size:12px;" styleClass="validate[required]">
+								<rich:validator />
+							</h:inputText>
+						</div>
+						<div class="fix"><rich:message for="mobile2" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Uploads</h5></div>
+                    <div class="rowElem noborder">
+						<h:outputLabel for="passport" value="Passport (Max Size: 60kb)"/>
+						<div class="formRight">
+							<rich:fileUpload id="passport" fileUploadListener="#{registrar.passportlistener}" acceptedTypes="jpg, gif, png, bmp"
+				                ontyperejected="alert('Only JPG, GIF, PNG and BMP files are accepted');" maxFilesQuantity="1" immediateUpload="true">
+				                <a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+				            </rich:fileUpload>
+						</div>
+						<div class="fix"><strong><font color="red"><h:outputText value="You have uploaded an INVALID passport. Please upload a smaller file. Thank you." rendered="#{registrar.passport != null and (registrar.passport.length > 60000) }" /></font></strong><h:outputText value="You already have a passport uploaded. However, you may upload a different passport to replace it." rendered="#{registrar.passport != null and not (registrar.passport.length > 60000) }" /><rich:message for="passport" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="cv" value="CV (Max Size: 60kb)"/>
+						<div class="formRight">
+							<rich:fileUpload id="cv" fileUploadListener="#{registrar.cvlistener}" acceptedTypes="doc, docx, pdf"
+				                ontyperejected="alert('Only DOC, DOCX and PDF files are accepted');" maxFilesQuantity="1" immediateUpload="true">
+				                <a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+				            </rich:fileUpload>
+						</div>
+						<div class="fix"><strong><font color="red"><h:outputText value="You have uploaded an INVALID cv. Please upload a smaller file. Thank you." rendered="#{registrar.cv != null and (registrar.cv.length > 60000) }" /></font></strong><h:outputText value="You already have a cv uploaded. However, you may upload a different cv to replace it." rendered="#{registrar.cv != null and not (registrar.cv.length > 60000) }" /><rich:message for="cv" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<div class="fix"><br/><br/></div>
+				<div class="submitForm"><h:commandButton action="#{registrar.Preview}" value="PREVIEW INFORMATION" styleClass="redBtn" /></div>
+			</fieldset>
+			
+			<a4j:jsFunction name="remove" action="#{registrar.RemoveQualification}" render="quals" execute="@this"
+            oncomplete="#{rich:component('confirmPane')}.hide();" />
+            
+            <a4j:jsFunction name="remove2" action="#{registrar.RemoveEmployment}" render="employs" execute="@this"
+            oncomplete="#{rich:component('confirmPane2')}.hide();" />
+            
+            <rich:popupPanel id="confirmPane" autosized="true">
+	            Are you sure you want to delete the row?
+	            <a4j:commandButton value="Cancel" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+	            <a4j:commandButton value="Delete" onclick="remove(); return false;" />
+	        </rich:popupPanel>
+	        
+	        <rich:popupPanel id="confirmPane2" autosized="true">
+	            Are you sure you want to delete the row?
+	            <a4j:commandButton value="Cancel" onclick="#{rich:component('confirmPane2')}.hide(); return false;" />
+	            <a4j:commandButton value="Delete" onclick="remove2(); return false;" />
+	        </rich:popupPanel>
+			
+    	</h:form>
+    </div>
+</div>
+</ui:composition>

@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+<ui:insert name="metadata"/>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>#{bundles.messages.template_title}</title>
+	<link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/><!-- macback2.png -->
+	<style type="text/css">
+		body {
+			background: url(#{request.contextPath}/images/Navy_Ship_Home.jpg);
+			margin: 0;
+			padding: 0;
+			font-family: geneva, arial, helvetica, sans-serif;
+			font-size:70%;
+		}
+
+		.ui-menuitem-icon.ui-icon.appleIcon {
+			background: url(../../images/apple.png) no-repeat;
+            width:16px;
+            height:16px;
+            border-radius:0px;
+		}
+
+        .ui-dialog .ui-terminal {
+            border:0;
+        }
+
+        .ui-dialog.terminalDialog .ui-dialog-content {
+            padding:0;
+        }
+	</style>
+	<ui:insert name="head"/>
+</h:head>
+<h:body>
+
+<p:growl sticky="true"/>
+
+<h:form>
+<p:menubar rendered="#{identity.loggedIn}" autoDisplay="false">
+	<p:menuitem value="Dashbaord" outcome="dashboard" icon="ui-icon-star" />
+	
+	<p:submenu label="Maintenance" icon="ui-icon-document">
+		<p:submenu label="Permissions" icon="ui-icon-document">
+			<p:menuitem value="Manage Roles" outcome="roles" />
+		</p:submenu>
+		<p:separator />
+		<p:submenu label="Assets" icon="ui-icon-document">
+			<p:menuitem value="Manage Locations" outcome="locations"  />
+			<p:separator />
+			<p:menuitem value="Manage Warehouses" outcome="warehouses" />
+			<p:separator />
+			<p:menuitem value="Manage Suppliers" outcome="suppliers" />
+			<p:separator />
+			<p:menuitem value="Manage Items" outcome="items" />
+			<p:separator />
+			<p:menuitem value="Manage Ships" outcome="ships" />
+		</p:submenu>
+		<p:separator />
+		<p:menuitem value="Manage Users" outcome="users" />
+	</p:submenu>
+	<p:submenu label="Inventory" icon="ui-icon-document">
+		<p:menuitem value="Warehouses Inventory" outcome="mngwarehousesinventory" />
+		<p:separator />
+		<p:menuitem value="Ships Inventory" outcome="mngshipsinventory" />
+		<p:separator />
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:separator />
+		<p:menuitem value="Items Warehouse Report" action="#{itemBean.movetoitemsreport}" outcome="items_report"
+			rendered="#{currentUser.ship == null}" />
+	</p:submenu>
+	<f:facet name="options">
+		<p:commandButton value="#{shipBean.focPendingRequests.size()} pending request(s)" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests"
+			rendered="#{currentUser.role.name == 'FOC'}" ajax="false" style="color:red" />
+		<p:commandButton value="#{shipBean.spPendingRequests.size()} pending request(s)" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests"
+			rendered="#{(currentUser.role.name == 'Logistics' or currentUser.role.name == 'Store Personnel') and currentUser.role.type != 'Ship'}" ajax="false" style="color:red" />
+		<p:commandButton value="#{shipBean.spsPendingRequests.size()} in-progress request(s)" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests"
+			rendered="#{(currentUser.role.name == 'Logistics' or currentUser.role.name == 'Store Personnel') and currentUser.role.type == 'Ship'}" ajax="false" style="color:red" />
+		<h:outputText value=" | " />
+		<h:outputText value="#{currentUser.firstname} (#{currentUser.role.name}) " />
+		<h:outputText value="Ship: #{currentUser.ship.name} (#{currentUser.ship.code})" rendered="#{currentUser.ship != null}"/>
+		<h:outputText value="Warehouse: #{currentUser.warehouse.name} (#{currentUser.warehouse.code})" rendered="#{currentUser.warehouse != null}"/>
+		<h:outputText value=" | " />
+		<h:outputLabel for="itemSearch" value="Search:" />
+		<p:inputText id="itemSearch" style="margin-right:10px"/>
+		<p:commandButton value="Logout" ajax="false" action="#{identity.logout}" icon="ui-icon-extlink" />
+	</f:facet>
+</p:menubar>
+</h:form>
+
+<!-- Insert content here. Each page must identify their own content and design accordingly -->
+<ui:insert name="content"/>
+
+</h:body>
+</f:view>
+</html>

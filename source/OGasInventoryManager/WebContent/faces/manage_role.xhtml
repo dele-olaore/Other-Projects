@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+<f:view contentType="text/html">
+	<table style="width:100%;height:550px">
+		<tr valign="top">
+		<td valign="top" align="center">
+			<h:form id="form">
+			<p:tabView id="tabView">
+				<p:tab id="tab1" title="Manage Roles">
+					<p:dataTable id="rolesTable" var="obj" value="#{userMBean.rolesList}"
+						paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50" style="width:100%">
+						<f:facet name="header">
+							Available roles
+						</f:facet>
+						
+						<p:column sortBy="#{obj.name}" headerText="Role" filterBy="#{obj.name}" filterMatchMode="contains">
+							<h:outputText value="#{obj.name}" />
+						</p:column>
+						
+						<p:column sortBy="#{obj.description}" headerText="Description" filterBy="#{obj.description}" filterMatchMode="contains">
+							<h:outputText value="#{obj.description}" />
+						</p:column>
+						
+						<p:column>
+							<p:commandButton value="View"
+								icon="ui-icon-view" update=":rdetForm:display"
+								oncomplete="rdetDialog.show()" title="View role functions" id="viewFButton">
+								<f:setPropertyActionListener value="#{obj}"
+									target="#{userMBean.selectedRoleObj}" />
+							</p:commandButton>
+						</p:column>
+						
+						<p:column>
+							<h:outputText value="Edit" />
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+				<p:tab id="tab2" title="Manage Users">
+					
+				</p:tab>
+			</p:tabView>
+			</h:form>
+		</td>
+		</tr>
+	</table>
+	
+<p:dialog header="Role details"
+	widgetVar="rdetDialog" resizable="false" id="rdetDlg"
+	showEffect="fade" hideEffect="fade" modal="true" appendToBody="true">
+
+	<h:form id="rdetForm">
+	<p:outputPanel id="rdetOutPanel" autoUpdate="true">
+	<h:panelGrid id="display" columns="1" cellpadding="4">
+		<h:outputLabel id="lrname" for="rname" value="Name" />
+	  	<p:inputText id="rname" value="#{userMBean.selectedRoleObj.name}" />
+	  	
+	  	<h:outputLabel id="lrdesc" for="rdesc" value="Description" />
+	  	<p:inputTextarea id="rdesc" rows="3" cols="45" value="#{userMBean.selectedRoleObj.description}" />
+	  	
+	  	<h:outputLabel id="lrfuncs" for="rfuncs" value="Functions" />
+	  	<p:dataGrid var="func" value="#{userMBean.selectedRoleFunctions}" columns="2"  
+        	rows="20" paginator="true"  
+        	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        	rowsPerPageTemplate="20,50">
+        	
+        	<p:selectBooleanCheckbox value="#{func.selected}" />
+        	<h:outputText value="#{func.name}" />
+        </p:dataGrid>
+	</h:panelGrid>
+	</p:outputPanel>
+	</h:form>
+</p:dialog>
+	
+</f:view>
+</ui:define>
+</ui:composition>

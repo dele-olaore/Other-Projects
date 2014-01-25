@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Warehouses Inventory" outcome="mngwarehousesinventory" />
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New Supplies" icon="ui-icon-document" onclick="dlg.show();" type="button"
+			rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and (currentUser.role.type == 'Warehouse' or currentUser.role.type == 'Global'))}"/>
+	</td></tr>
+	</table>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%;horizontal-textalign:center">
+	<p:dataTable id="dataTable" var="obj" value="#{warehouseBean.warehousesList}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available warehouses
+		</f:facet>
+
+		<p:column sortBy="#{obj.name}" headerText="Warehouse" filterBy="#{obj.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+			<h:outputText value="#{obj.code}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.address}" headerText="Address">
+			<h:outputText value="#{obj.address}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.location.name}" headerText="Location" filterBy="#{obj.location.name}" filterMatchMode="exact"
+			filterOptions="#{dropdownBean.locationsSelect}">
+			<h:outputText value="#{obj.location.name}" />
+		</p:column>
+
+		<p:column headerText="Settings">
+			<p:commandLink action="#{warehouseBean.movetosettings(obj.id)}" immediate="true" outcome="warehousesettings" style="margin-right:20px;" ajax="false"
+				rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and currentUser.role.type == 'Warehouse')}">
+				<h:outputText value="Settings" />
+			</p:commandLink>
+		</p:column>
+		
+		<p:column headerText="Inventory">
+			<p:commandLink action="#{warehouseBean.movetoinventory(obj.id)}" immediate="true" outcome="warehouseinventory" style="margin-right:20px;" ajax="false">
+				<h:outputText value="View Inventory" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Supplies" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+		<h:outputLabel for="itsloc" value="#{bundles.messages.locationLabel}:" />
+  		<p:selectOneMenu id="itsloc" value="#{warehouseBean.itemSupply.warehouse.location.id}">
+  			<f:selectItem itemLabel="" itemValue="0" />
+  			<f:selectItems value="#{dropdownBean.locations}" var="loc" itemLabel="#{loc.name}" itemValue="#{loc.id}" />
+  			<p:ajax update="itsware" />
+  		</p:selectOneMenu>
+		
+  		<h:outputLabel for="itsware" value="#{bundles.messages.warehouseLabel}: *" />
+  		<p:selectOneMenu id="itsware" value="#{warehouseBean.itemSupply.warehouse.id}">
+  			<f:selectItem itemLabel="" itemValue="0" />
+  			<f:selectItems value="#{dropdownBean.warehouses(warehouseBean.itemSupply.warehouse.location.id)}" var="wobj" itemLabel="#{wobj.name}" itemValue="#{wobj.id}" />
+  			<p:ajax update="itemTable" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel value="#{bundles.messages.itemLabel}:" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+	  		<p:panelGrid columns="2" cellpadding="1" style="margin-bottom:10px;">
+	  			<p:panelGrid columns="2" cellpadding="1" style="margin-bottom:10px;">
+	  				<h:outputLabel for="itsit" value="#{bundles.messages.itemLabel}:" />
+			  		<p:selectOneMenu id="itsit" value="#{warehouseBean.itemSupply.item.id}">
+			  			<f:selectItem itemLabel="" itemValue="0" />
+			  			<f:selectItems value="#{dropdownBean.items}" var="itm" itemLabel="#{itm.name}" itemValue="#{itm.id}" />
+			  			<p:ajax update="itemTable" />
+			  		</p:selectOneMenu>
+	  			</p:panelGrid>
+	  			<p:panelGrid columns="3" cellpadding="1" style="margin-bottom:10px;">
+	  				<h:outputLabel for="itsitbcd" value="#{bundles.messages.barcodeLabel}:" />
+	  				<p:inputText id="itsitbcd" value="#{warehouseBean.itemSupply.item.barcode}" label="itsitbcd">
+	  					<p:ajax update="itemTable" />
+	  				</p:inputText>
+	  			</p:panelGrid>
+	  		</p:panelGrid>
+  			<p:dataTable id="itemTable" var="obj" value="#{warehouseBean.selectedItems}"
+				rows="1" style="width:100%">
+				<f:facet name="header">
+					Selected item
+				</f:facet>
+				 
+				<p:column headerText="Item">
+					<h:outputText value="#{obj.name}" />
+				</p:column>
+				
+				<p:column headerText="Code">
+					<h:outputText value="#{obj.code}" />
+				</p:column>
+				
+				<p:column headerText="Current stock">
+					<h:outputText value="#{warehouseBean.selItemInventorySettings.stock_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Max level">
+					<h:outputText value="#{warehouseBean.selItemInventorySettings.settings.max_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Min level">
+					<h:outputText value="#{warehouseBean.selItemInventorySettings.settings.min_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Re-order level">
+					<h:outputText value="#{warehouseBean.selItemInventorySettings.settings.reorder_lvl}" />
+				</p:column>
+			</p:dataTable>
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="itsquan" value="#{bundles.messages.quantityLabel}: *" />
+  		<p:inputText id="itsquan" value="#{warehouseBean.itemSupply.amount}" required="true" label="itsquan" />
+  		
+  		<h:outputLabel for="itsdate" value="#{bundles.messages.dateLabel}: *" />
+  		<p:calendar value="#{warehouseBean.itemSupply.date}" id="itsdate" showOn="button" required="true" />
+  		
+  		<h:outputLabel value="#{bundles.messages.storageLabel}: *" />
+  		<p:panelGrid columns="2" cellpadding="1" style="margin-bottom:10px;">
+  			<h:outputLabel for="itscontainer" value="#{bundles.messages.containerNoLabel}:" />
+  			<p:inputText id="itscontainer" value="#{warehouseBean.itemSupply.container_number}" label="itscontainer" />
+  			
+  			<h:outputLabel for="itsrack" value="#{bundles.messages.rackLabel}:" />
+  			<p:inputText id="itsrack" value="#{warehouseBean.itemSupply.rack}" label="itsrack" />
+  		
+  			<h:outputLabel for="itsrackno" value="#{bundles.messages.rackNoLabel}:" />
+  			<p:inputText id="itsrackno" value="#{warehouseBean.itemSupply.rack_number}" label="itsrackno" />
+  		</p:panelGrid>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" outcome="mngwarehousesinventory" action="#{warehouseBean.SaveUpdateSupply}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

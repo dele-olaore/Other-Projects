@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Locations" outcome="locations" />
+	</p:breadCrumb>
+
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button"
+			rendered="#{currentUser.role.name == 'Administrator'}"/>
+	</td></tr>
+	</table>
+
+	<center>
+	<p:panel id="tablePanel" style="width:55%;horizontal-textalign:center">
+	<p:dataTable id="dataTable" var="obj" value="#{locationBean.locations}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available locations
+		</f:facet>
+
+		<p:column sortBy="#{obj.name}" headerText="Location" filterBy="#{obj.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+			<h:outputText value="#{obj.code}" />
+		</p:column>
+
+		<p:column headerText="Manage Warehouses">
+			<h:outputText value="#{obj.warehouseCount} warehouse(s)" />
+			<br/>
+			<p:commandLink value="Manage warehouses" outcome="warehouses" rendered="#{currentUser.role.name == 'Administrator'}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink action="#{locationBean.movetoupdate(obj.id)}" outcome="location_edit" ajax="false" style="margin-right:20px;"
+				rendered="#{currentUser.role.name == 'Administrator'}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Location" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="locname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="locname" value="#{locationBean.location.name}" required="true" label="locname" />
+  		
+  		<h:outputLabel for="loccode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="loccode" value="#{locationBean.location.code}" required="true" label="loccode" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="true" update="tablePanel,dataTable,newDialog" action="#{locationBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:menuitem value="Request Items" outcome="request_items" />
+	</p:breadCrumb>
+
+	<center>
+		<p:panel id="reqitemsPanel" style="width:80%">
+			<p:dataTable id="requestItemsTable" var="obj" value="#{shipBean.selRequestItems}" style="width:480px" dynamic="true">
+				<f:facet name="header">
+					Request Items
+				</f:facet>
+				
+				<p:column sortBy="#{obj.item.name}" headerText="Item">
+					<h:outputText value="#{obj.item.name}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedAmount}" headerText="Quantity">
+					<h:outputText value="#{obj.requestedAmount}" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</center>
+	</h:form>
+</ui:define>
+</ui:composition>

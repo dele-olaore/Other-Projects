@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Server">
+        
+        <EditTextPreference
+            android:summary="Please enter the IP of the remote server."
+            android:defaultValue="173.201.44.90"
+            android:title="Server IP"
+            android:key="remoteServerIP" />
+        
+        <EditTextPreference
+            android:summary="Please enter the Port No. on the remote server."
+            android:defaultValue="8098"
+            android:title="Server Port No."
+            android:key="remoteServerPort" />
+    </PreferenceCategory>
+    
+</PreferenceScreen>

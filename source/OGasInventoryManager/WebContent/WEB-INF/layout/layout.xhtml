@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+<ui:insert name="metadata"/>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>#{message.Title}</title>
+	<link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+	<style type="text/css">
+		body {
+			background: url(#{request.contextPath}/images/macback.png);
+			margin: 0;
+			padding: 0;
+			font-family: geneva, arial, helvetica, sans-serif;
+			font-size:70%;
+		}
+
+		.ui-menuitem-icon.ui-icon.appleIcon {
+			background: url(../../images/apple.png) no-repeat;
+            width:16px;
+            height:16px;
+            border-radius:0px;
+		}
+
+        .ui-dialog .ui-terminal {
+            border:0;
+        }
+
+        .ui-dialog.terminalDialog .ui-dialog-content {
+            padding:0;
+        }
+        
+        .ui-widget, .ui-widget .ui-widget, .ui-state-default, .ui-widget-content {
+			font-size: 12px !important;
+		}
+	</style>
+	<ui:insert name="head"/>
+</h:head>
+<h:body>
+
+<p:growl id="glow" sticky="true" showDetail="true" />
+
+<h:form>
+<p:menubar rendered="#{request.session.getAttribute('user') != null}" autoDisplay="false">
+	<p:menuitem value="Dashbaord" outcome="home" icon="ui-icon-star" />
+	
+	<p:submenu label="Maintenance" icon="ui-icon-document" rendered="#{userMBean.isModuleAvailableForUser('Maintenance')}">
+		<p:menuitem value="Manage Role" outcome="manage_role" rendered="#{userMBean.isFunctionAvailableForUser('Maintenance', 'Manage Role')}" />
+		<p:menuitem value="Manage MFB" outcome="manage_mfbs" rendered="#{userMBean.isFunctionAvailableForUser('Maintenance', 'Manage MFB')}" />
+		<p:menuitem value="Manage Retailer" outcome="manage_rets" rendered="#{userMBean.isFunctionAvailableForUser('Maintenance', 'Manage Retailer')}" />
+		<p:menuitem value="Manage Station" outcome="manage_stats" rendered="#{userMBean.isFunctionAvailableForUser('Maintenance', 'Manage Station')}" />
+	</p:submenu>
+	
+	<f:facet name="options">
+		<h:outputText value="#{request.session.getAttribute('user').fullname}" />
+		<h:outputText value=" | " />
+		<p:commandButton value="Logout" ajax="false" action="#{loginBean.logout}" icon="ui-icon-extlink" />
+	</f:facet>
+</p:menubar>
+</h:form>
+
+<p:ajaxStatus styleClass="ajaxStatus" id="ajaxStatusPanel">
+	<f:facet name="start">
+		<h:graphicImage value="/images/ajax-loader.gif"
+			id="LoadingImage" />
+	</f:facet>
+	<f:facet name="complete">
+		<h:outputText value="" id="onComplete" />
+	</f:facet>
+</p:ajaxStatus>
+
+<!-- Insert content here. Each page must identify their own content and design accordingly -->
+<ui:insert name="content"/>
+	
+</h:body>
+</f:view>
+</html>

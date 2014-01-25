@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Warehouses" outcome="warehouses" />
+		<p:menuitem value="#{warehouseBean.warehouse.name} Inventory" outcome="warehouseinventory" />
+	</p:breadCrumb>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{warehouseBean.warehouseItemsInventory}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Inventory for warehouse: <h:outputText value="#{warehouseBean.warehouse.name}" />
+		</f:facet>
+		
+		<p:column sortBy="#{obj.item.name}" headerText="Item" filterBy="#{obj.item.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.item.name}" />
+			<br/>
+			<h:outputText value="#{obj.item.description}" />
+		</p:column>
+		
+		<p:column headerText="Settings">
+			<h:outputText value="Max Level: #{obj.settings.max_lvl}" />
+			<br/>
+			<h:outputText value="Min Level: #{obj.settings.min_lvl}" />
+			<br/>
+			<h:outputText value="Re-order Level: #{obj.settings.reorder_lvl}" />
+		</p:column>
+		
+		<p:column headerText="Stock Level">
+			<h:outputText value="#{obj.stock_lvl}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink action="#{warehouseBean.selectItemForSpareparts(obj.item.id)}" ajax="false" outcome="warehousespareparts" style="margin-right:20px;">
+				<h:outputText value="View Spareparts" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

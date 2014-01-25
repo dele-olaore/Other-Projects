@@ -1,0 +1,68 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html">
+<!-- Header -->
+<div id="header" class="wrapper">
+    <div class="logo"><h3>Candidate Bio Data Form</h3><!-- <a href="/" title=""><img src="images/loginLogo2.png" alt="" /></a> --></div><!-- loginLogo2.png -->
+    <div class="middleNav">
+    	<ul>
+        	<li><img src="images/nxz-logo.jpg" alt="" /></li>
+        </ul>
+    </div>
+    <div class="fix"></div>
+</div>
+
+
+<!-- Content wrapper -->
+<div class="wrapper">
+	
+	<!-- Left navigation -->
+    <div class="leftNav">
+    	<ul id="menu">
+        	<li class="dash"><a href="dashboard.seam" title="Dashboard" class="active"><span>Dashboard</span></a></li>
+            <li class="forms"><a href="fill-form.seam" title="Fill the recruitment form"><span>Bio-data Form</span></a></li>
+		</ul>
+	</div>
+	
+	<!-- Content -->
+    <div class="content">
+    	<div class="title"><h5>Dashboard</h5></div>
+    	<p>
+    	Welcome #{currentUser.username},<br/>
+    	<br/>
+    	<strong>Note: The closing date is now extended to <font color="red">31 March, 2013</font>. If you have any troble updating your profile, please send an email to okerevictor@gmail.com. Thank you.</strong>
+    	<br/><br/>
+    	Kindly follow the instructions below to complete the Bio-data form.
+    	<br/><br/>
+    	<ol>
+    		<li>
+    			<strong>Required Documents: -</strong>
+    			<br/>
+    			Current CV in MS Word format, Passport sized photograph in .jpeg format and NYSC discharge number.<br/><br/>
+    		</li>
+    		<li>
+    			<strong>Bio-data Form: -</strong>
+    			<br/>
+    			Click <a href="fill-form.seam">here</a> or click the "Bio-data Form" link to your left to access the "Bio-data Form" page.<br/>Please ensure you fill all required fields. Required fields are denoted with the '*' sign.<br/><br/>
+    		</li>
+    		<li>
+    			<strong>Preview Information: -</strong>
+    			<br/>
+    			After filling all required fields, kindly click on "Preview Information". This allows you to preview the information entered to ensure they are accurate. Review all information entered carefully after which you can either go back to "Bio-data Form" to make changes or you can "Submit" the form on the preview page to save your data thus completing the process.
+    			<br/><br/> 
+    		</li>
+    	</ol>
+    	<br/>
+    	<strong>Note: -</strong> 
+    	<ul>
+    		<li>Do not click submit if you do not have the supporting documents. Simply close browser and return when you have all documents required.</li>
+    		<li>You can only submit the form once. As soon as you submit the form, access to the site will be denied using your log on details. Therefore kindly review all information supplied properly before submission.</li>
+    	</ul>
+    	<br/> 
+    	</p>
+    </div>
+</div>
+</ui:composition>

@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Ships" outcome="ships" />
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button" rendered="#{currentUser.role.name == 'Administrator'}"/>
+	</td></tr>
+	</table>
+
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{shipBean.ships}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available ships
+		</f:facet>
+		
+		<p:column sortBy="#{obj.name}" headerText="Ship" filterBy="#{obj.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+			<h:outputText value="#{obj.code}" />
+		</p:column>
+		
+		<p:column headerText="Settings">
+			<p:commandLink action="#{shipBean.movetosettings(obj.id)}" immediate="true" outcome="shipsettings" style="margin-right:20px;" ajax="false"
+				rendered="#{currentUser.role.name == 'Administrator' or currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics'}">
+				<h:outputText value="Settings" />
+			</p:commandLink>
+		</p:column>
+		
+		<p:column headerText="Inventory">
+			<p:commandLink action="#{shipBean.movetoinventory(obj.id)}" immediate="true" outcome="shipinventory" style="margin-right:20px;" ajax="false">
+				<h:outputText value="View Inventory" />
+			</p:commandLink>
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink ajax="false" onclick="alert('Under Construction!');return false;" style="margin:0"
+				rendered="#{currentUser.role.name == 'Administrator'}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Ship" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="shname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="shname" value="#{shipBean.ship.name}" required="true" label="shname" />
+  		
+  		<h:outputLabel for="shcode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="shcode" value="#{shipBean.ship.code}" required="true" label="shcode" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" action="#{shipBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

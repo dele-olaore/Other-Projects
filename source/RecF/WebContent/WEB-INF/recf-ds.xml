@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+
+    <!-- <datasource jndi-name="java:jboss/datasources/RecFDS" pool-name="recf" enabled="true" use-java-context="true">
+        <connection-url>jdbc:h2:mem:trainq;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+        <driver>h2</driver>
+        <security>
+            <user-name>sa</user-name>
+            <password>sa</password>
+        </security>
+    </datasource> -->
+    
+    <datasource jndi-name="java:jboss/datasources/RecFDS" pool-name="recf" enabled="true" use-java-context="true">
+        <connection-url>jdbc:mysql://127.0.0.1:3306/recf</connection-url>
+        <driver>mysql</driver>
+        <security>
+            <user-name>root</user-name>
+            <password>dexter</password>
+        </security>
+    </datasource>
+</datasources>

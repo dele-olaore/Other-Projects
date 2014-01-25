@@ -1,0 +1,64 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+<!-- Header -->
+<div id="header" class="wrapper">
+    <div class="logo"><h3>Candidate Bio Data Form</h3><!-- <a href="/" title=""><img src="images/loginLogo2.png" alt="" /></a> --></div>
+    <div class="middleNav">
+    	<ul>
+    		<li><img src="images/nxz-logo.jpg" alt="" /></li>
+    	</ul>
+    </div>
+    <div class="fix"></div>
+</div>
+
+
+<!-- Content wrapper -->
+<div class="wrapper">
+	
+	<!-- Left navigation -->
+    <div class="leftNav">
+    	<ul id="menu">
+        	<li class="dash"><a href="dashboard.seam" title="Dashboard"><span>Dashboard</span></a></li>
+            <li class="forms"><a href="load-users.seam" title="Load users from excel file" class="active"><span>Load Users</span></a></li>
+            <li class="forms"><a href="view-users.seam" title="View profiles of users that have filled their information"><span>View User Profiles</span></a></li>
+            <li class="forms"><a href="view-stats.seam" title="View statistics on how much users have filled and not filled"><span>View Stats</span></a></li>
+		</ul>
+	</div>
+	
+	<!-- Content -->
+    <div class="content">
+    	<div class="title"><h5>Load Users</h5></div>
+    	<h:form>
+    		<span class="errors">
+		       <h:messages errorClass="error" styleClass="messages" id="messages" globalOnly="true"/>
+		    </span>
+    		<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Upload</h5></div>
+                    <div class="rowElem noborder">
+						<h:outputLabel for="ulist" value="Users List"/>
+						<div class="formRight">
+							<rich:fileUpload id="ulist" fileUploadListener="#{admin.excelListener}" acceptedTypes="csv, xls"
+				                ontyperejected="alert('Only CSV and XLS files are accepted');" maxFilesQuantity="1" immediateUpload="true">
+				                <a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+				            </rich:fileUpload>
+						</div>
+						<div class="fix"><h:outputText value="You already have a passport uploaded. However, you may upload a different passport to replace it." rendered="#{registrar.passport != null}" /><rich:message for="passport" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<div class="fix"><br/><br/></div>
+				<div class="submitForm"><h:commandButton action="#{admin.loadUsers}" value="LOAD USERS" styleClass="redBtn" /></div>
+			</fieldset>
+    	</h:form>
+    </div>
+</div>
+</ui:composition>

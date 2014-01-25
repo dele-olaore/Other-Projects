@@ -1,0 +1,31 @@
+<loader version="1.0">
+	<application id="MTNOdometerTrackerBB">
+		<name >
+			MTN Drivers Odometer Tracker
+		</name>
+		<description >
+			
+		</description>
+		<version >
+			1.0.0
+		</version>
+		<vendor >
+			deXter
+		</vendor>
+		<copyright >
+			Copyright (c) 2013 deXter
+		</copyright>
+		<fileset Java="1.55" _blackberryVersion="[6.0.0)">
+			<directory >
+				6.0.0
+			</directory>
+			<files >
+				MTNOdometerTrackerBB.cod
+
+			</files>
+
+		</fileset>
+
+	</application>
+
+</loader>

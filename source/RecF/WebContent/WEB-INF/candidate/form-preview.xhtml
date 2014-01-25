@@ -1,0 +1,299 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+<!-- Header -->
+<div id="header" class="wrapper">
+    <div class="logo"><h3>Candidate Bio Data Form</h3><!-- <a href="/" title=""><img src="images/loginLogo2.png" alt="" /></a> --></div>
+    <div class="middleNav">
+    	<ul>
+    		<li><img src="images/nxz-logo.jpg" alt="" /></li>
+    	</ul>
+    </div>
+    <div class="fix"></div>
+</div>
+
+
+<!-- Content wrapper -->
+<div class="wrapper">
+	
+	<!-- Left navigation -->
+    <div class="leftNav">
+    	<ul id="menu">
+        	<li class="dash"><a href="dashboard.seam" title="Dashboard"><span>Dashboard</span></a></li>
+            <li class="forms"><a href="fill-form.seam" title="Fill the recruitment form" class="active"><span>Bio-data Form</span></a></li>
+		</ul>
+	</div>
+	
+	<!-- Content -->
+    <div class="content">
+    	<div class="title"><h5>Information Preview</h5></div>
+    	<h:form>
+    		<span class="errors">
+               <strong><font color="red"><h:messages errorClass="error" styleClass="messages" id="messages" globalOnly="true"/></font></strong>
+               <br/>
+               <strong>Note: The closing date is now extended to <font color="red">31 March, 2013</font>. If you have any troble updating your profile, please send an email to okerevictor@gmail.com. Thank you.</strong>
+               <br/> 
+            </span>
+    		<fieldset>
+    			<div class="widget first">
+                    <div class="head"><h5 class="iList">Account details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="tstid" value="Test ID"/>
+						<div class="formRight">
+							<h:outputText id="tstid" value="#{userProfile.testid}" style="width: 175px;" styleClass="validate[required]" required="true" />
+						</div>
+						<div class="fix"><rich:message for="tstid" style="color: red;"/></div>
+					</div>
+				</div>
+    		</fieldset>
+    		<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Personal details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="fname" value="First name"/>
+						<div class="formRight">
+							<h:outputText id="fname" value="#{userProfile.firstname}" style="width: 175px;" styleClass="validate[required]" />
+						</div>
+						<div class="fix"><rich:message for="fname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mname" value="Middle name"/>
+						<div class="formRight">
+							<h:outputText id="mname" value="#{userProfile.middlename}" style="width: 175px;" />
+						</div>
+						<div class="fix"><rich:message for="mname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="lname" value="Last name"/>
+						<div class="formRight">
+							<h:outputText id="lname" value="#{userProfile.lastname}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="lname" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="dob" value="Date of birth"/>
+						<div class="formRight">
+							<h:outputText id="dob" value="#{userProfile.dateofbirth}" locale="us" datePattern="yyyy-MM-dd" required="true">
+								
+							</h:outputText><!-- <f:convertDateTime type="date" dateStyle="medium"/> -->
+						</div>
+						<div class="fix"><rich:message for="dob" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="gender" value="Gender"/>
+						<div class="formRight">
+							<h:outputText id="gender" value="#{userProfile.gender}" required="true" />
+						</div>
+						<div class="fix"><rich:message for="gender" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="sog" value="State of origin"/>
+						<div class="formRight">
+							<h:outputText id="sog" value="#{userProfile.stateoforigin.name}" required="true" />
+						</div>
+						<div class="fix"><rich:message for="sog" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="log" value="Local government area of origin"/>
+						<div class="formRight">
+							<h:outputText id="log" value="#{userProfile.localgovtarea.name}" required="true" />
+						</div>
+						<div class="fix"><rich:message for="log" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">NYSC details</h5></div>
+					<div class="rowElem noborder">
+						<h:outputLabel for="nyscyr" value="Graduation Year"/>
+						<div class="formRight">
+							<h:outputText id="nyscyr" value="#{userProfile.nyscyear}" required="true" />
+						</div>
+						<div class="fix"><rich:message for="nyscyr" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="nyscnumber" value="Discharge number"/>
+						<div class="formRight">
+							<h:outputText id="nyscnumber" value="#{userProfile.nyscnumber}" required="true" />
+						</div>
+						<div class="fix"><rich:message for="nyscnumber" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Education details</h5></div>
+                    <div class="rowElem noborder">
+                    	<rich:dataTable id="quals" width="700" var="obj" value="#{registrar.eduQualificationsList}" iterationStatusVar="it">
+        					<f:facet name="header"></f:facet>
+        					<rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="School" />
+				                </f:facet>
+				                <h:outputText value="#{obj.schoolname}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Qualification" />
+				                </f:facet>
+				                <h:outputText value="#{obj.qualification}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Year of graduation" />
+				                </f:facet>
+				                <h:outputText value="#{obj.gradyr}" />
+				            </rich:column>
+        				</rich:dataTable>
+                    </div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Employment details</h5></div>
+                    <div class="rowElem noborder">
+                    	<rich:dataTable id="employs" width="700" var="obj" value="#{registrar.employmentList}" iterationStatusVar="it">
+        					<f:facet name="header"></f:facet>
+        					<rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Employer" />
+				                </f:facet>
+				                <h:outputText value="#{obj.employer}" />
+				            </rich:column>
+				            <rich:column>
+				                <f:facet name="header">
+				                    <h:outputText value="Salary" />
+				                </f:facet>
+				                <h:outputText value="#{obj.salary}" />
+				            </rich:column>
+        				</rich:dataTable>
+                    </div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Experience details</h5></div>
+                    <div class="rowElem noborder">
+						<h:outputLabel for="yearsofexp" value="Years of post NYSC experience"/>
+						<div class="formRight">
+							<h:outputText id="yearsofexp" value="#{userProfile.yearsofexp}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="yearsofexp" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Contact details</h5></div>
+                    <div class="rowElem">
+						<h:outputLabel for="address" value="Address"/>
+						<div class="formRight">
+							<h:outputText id="address" value="#{userProfile.address}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="address" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="city" value="City"/>
+						<div class="formRight">
+							<h:outputText id="city" value="#{userProfile.city}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="city" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="addrst" value="State"/>
+						<div class="formRight">
+							<h:outputText id="addrst" value="#{userProfile.state.name}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="addrst" style="color: red;"/></div>
+					</div>
+					<!-- <div class="rowElem">
+						<h:outputLabel for="addrlg" value="Local government area"/>
+						<div class="formRight">
+							<h:outputText id="addrlg" value="#{userProfile.lgarea.name}" style="width: 175px;" styleClass="validate[required]" required="true"/>
+						</div>
+						<div class="fix"><rich:message for="addrlg" style="color: red;"/></div>
+					</div> -->
+					<div class="rowElem">
+						<h:outputLabel for="email" value="Email"/>
+						<div class="formRight">
+							<h:outputText id="email" value="#{userProfile.email}" style="width: 175px;" styleClass="validate[required]" />
+						</div>
+						<div class="fix"><rich:message for="email" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mobile1" value="Mobile number 1"/>
+						<div class="formRight">
+							<h:outputText id="mobile1" value="#{userProfile.mobileno1}" style="width: 175px;" styleClass="validate[required]" required="true" />
+						</div>
+						<div class="fix"><rich:message for="mobile1" style="color: red;"/></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel for="mobile2" value="Mobile number 2"/>
+						<div class="formRight">
+							<h:outputText id="mobile2" value="#{userProfile.mobileno2}" style="width: 175px;" styleClass="validate[required]" required="true" />
+						</div>
+						<div class="fix"><rich:message for="mobile2" style="color: red;"/></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+                <div class="widget first">
+                    <div class="head"><h5 class="iList">Uploads</h5></div>
+                    <div class="rowElem noborder">
+						<h:outputLabel value="Passport"/>
+						<div class="formRight">
+							<rich:panel bodyClass="rich-laguna-panel-no-header" rendered="#{registrar.passport != null}">
+                            <h:panelGrid columns="2">
+                                <a4j:mediaOutput element="img" mimeType="image/jpeg" createContent="#{registrar.paint}"
+									style="width:100px; height:100px;" cacheable="false">
+									<f:param value="#{registrar.timeStamp}" name="time" />
+								</a4j:mediaOutput>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="File Name:" />
+                                    <h:outputText value="#{registrar.passport.name}" />
+                                    <h:outputText value="File Length(bytes):" />
+                                    <h:outputText value="#{registrar.passport.length}" />
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        	</rich:panel>
+						</div>
+						<div class="fix"></div>
+					</div>
+					<div class="rowElem">
+						<h:outputLabel value="CV"/>
+						<div class="formRight">
+							<rich:panel bodyClass="rich-laguna-panel-no-header" rendered="#{registrar.cv != null}">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="File Name:" />
+                                <h:outputText value="#{registrar.cv.name}" />
+                                <h:outputText value="File Length(bytes):" />
+                                <h:outputText value="#{registrar.cv.length} #{(registrar.cv.length > 60000) ? '(Too large, upload a smaller file.)' : ''}" />
+                            </h:panelGrid>
+                        	</rich:panel>
+						</div>
+						<div class="fix"></div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<div class="fix"><br/><br/></div>
+				<div class="submitForm"><a href="fill-form.seam">Back to Bio-data Form</a> | <h:commandButton action="#{registrar.register}" value="SUBMIT INFORMATION" styleClass="redBtn" /></div>
+			</fieldset>
+			
+    	</h:form>
+    </div>
+</div>
+</ui:composition>

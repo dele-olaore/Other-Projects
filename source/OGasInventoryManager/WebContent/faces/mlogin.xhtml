@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		template="/WEB-INF/layout/mlayout.xhtml">
+<ui:define name="content">
+	<table style="width:100%;height:550px">
+	<tr><td valign="middle" align="center">
+	<h:form>
+		<p:panelGrid columns="2" style="margin-bottom:10px;">
+		<f:facet name="header">Authentication</f:facet>
+		
+  		<h:outputLabel for="uname" value="#{message.home_usernameLabel}: *" />
+  		<p:inputText id="uname" value="#{loginBean.email}" required="true" />
+  		
+  		<h:outputLabel for="pword" value="#{message.home_passwordLabel}: *" />
+  		<p:password id="pword" value="#{loginBean.password}" required="true" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{loginBean.login}" value="#{message.home_loginAction}" icon="ui-icon-check" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</h:form>
+	</td></tr>
+	</table>
+</ui:define>
+</ui:composition>

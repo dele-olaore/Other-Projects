@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="home" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Users" outcome="users"/>
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button"
+			rendered="#{request.session.getAttribute('user').email == 'dele.olaore@gmail.com' or request.session.getAttribute('user').email == 'victorokere@gmail.com'}" />
+	</td></tr>
+	</table>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{userMBean.usersList}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			All users
+		</f:facet>
+		
+		<p:column sortBy="#{obj.email}" headerText="Email" filterBy="#{obj.email}" filterMatchMode="contains">
+			<h:outputText value="#{obj.email}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.fullname}" headerText="Full name" filterBy="#{obj.fullname}" filterMatchMode="contains">
+			<h:outputText value="#{obj.fullname}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink ajax="false" onclick="alert('Under Construction!');return false;" style="margin:0"
+				rendered="#{request.session.getAttribute('user').email == 'dele.olaore@gmail.com' or request.session.getAttribute('user').email == 'victorokere@gmail.com'}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New User" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="ursuname" value="#{message.home_usernameLabel}: *" />
+  		<p:inputText id="ursuname" value="#{userMBean.userObj.email}" required="true" />
+  		
+  		<h:outputLabel for="urspwd" value="#{message.home_passwordLabel}: *" />
+  		<p:password id="urspwd" value="#{userMBean.userObj.password}" required="true" />
+  		
+  		<h:outputLabel for="urscpwd" value="#{message.cpasswordLabel}: " />
+  		<p:password id="urscpwd" value="#{userMBean.confirmPassword}" required="true" />
+  		
+  		<h:outputLabel for="ursfname" value="#{message.fnameLabel}:" />
+  		<p:inputText id="ursfname" value="#{userMBean.userObj.fullname}" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" action="#{userMBean.createUser}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Warehouses" outcome="warehouses" />
+		<p:menuitem value="Update" outcome="warehouse_edit" />
+	</p:breadCrumb>
+	
+	<center>
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="wname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="wname" value="#{warehouseBean.warehouse.name}" required="true" label="wname" />
+  		
+  		<h:outputLabel for="wcode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="wcode" value="#{warehouseBean.warehouse.code}" required="true" label="wcode" />
+  		
+  		<h:outputLabel for="waddr" value="#{bundles.messages.addressLabel}: *" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+  		<p:inputTextarea id="waddr" value="#{warehouseBean.warehouse.address}" label="waddr" rows="5" cols="30" counter="counter" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+  		<h:outputText id="counter" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="wloc" value="#{bundles.messages.locationLabel}: *" />
+  		<p:selectOneMenu id="wloc" value="#{warehouseBean.location_id}">
+  			<f:selectItems value="#{dropdownBean.locations}" var="loc" itemLabel="#{loc.name}" itemValue="#{loc.id}" />
+  		</p:selectOneMenu>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{warehouseBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

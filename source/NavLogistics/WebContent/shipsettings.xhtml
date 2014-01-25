@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Ships" outcome="ships" />
+		<p:menuitem value="#{shipBean.ship.name} Settings" outcome="shipsettings" />
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button"/>
+	</td></tr>
+	</table>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{shipBean.settings}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Item settings for ship: <h:outputText value="#{shipBean.ship.name}" />
+		</f:facet>
+		
+		<p:column sortBy="#{obj.item.name}" headerText="Item" filterBy="#{obj.item.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.item.name}" />
+			<br/>
+			<h:outputText value="#{obj.item.description}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.max_lvl}" headerText="Max Level">
+			<h:outputText value="#{obj.max_lvl}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.min_lvl}" headerText="Min Level">
+			<h:outputText value="#{obj.min_lvl}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.reorder_lvl}" headerText="Re-order Level">
+			<h:outputText value="#{obj.reorder_lvl}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink ajax="false" onclick="alert('Under Construction!');return false;" style="margin:0"
+				rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and currentUser.role.type == 'Ship')}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Ship" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="stitem" value="#{bundles.messages.itemLabel}: *" />
+  		<p:selectOneMenu id="stitem" value="#{shipBean.setting.item.id}">
+  			<f:selectItems value="#{dropdownBean.items}" var="it" itemLabel="#{it.name}" itemValue="#{it.id}" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="stmax" value="#{bundles.messages.maxlvlLabel}: *" />
+  		<p:inputText id="stmax" value="#{shipBean.setting.max_lvl}" required="true" label="stmax" />
+  		
+  		<h:outputLabel for="stmin" value="#{bundles.messages.minlvlLabel}: *" />
+  		<p:inputText id="stmin" value="#{shipBean.setting.min_lvl}" required="true" label="stmin" />
+  		
+  		<h:outputLabel for="streord" value="#{bundles.messages.reordlvlLabel}: *" />
+  		<p:inputText id="streord" value="#{shipBean.setting.reorder_lvl}" required="true" label="streord" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" action="#{shipBean.SaveUpdateSetting}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

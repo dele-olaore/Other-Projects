@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Ships Inventory" outcome="mngshipsinventory" />
+		<p:menuitem value="Request for ship: #{shipBean.ship.name}" outcome="shiprequest" />
+	</p:breadCrumb>
+	
+	<center>
+	<p:panel>
+		<f:facet name="header">New item request for ship: #{shipBean.ship.name}</f:facet>
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+			<h:outputLabel for="shrequnit" value="#{bundles.messages.reqnitLabel}: " />
+	  		<p:inputText id="shrequnit" value="#{shipBean.shipRequest.requesting_unit}" />
+		
+	  		<h:outputLabel for="shreqeqp" value="#{bundles.messages.equipmentLabel}: " />
+	  		<p:inputText id="shreqeqp" value="#{shipBean.shipRequest.equipment}" />
+	  		
+	  		<h:outputLabel for="shreqselno" value="#{bundles.messages.selnoLabel}: " />
+	  		<p:inputText id="shreqselno" value="#{shipBean.shipRequest.selno}" />
+	  		
+	  		<h:outputLabel for="shreqissno" value="#{bundles.messages.issnoLabel}: " />
+	  		<p:inputText id="shreqissno" value="#{shipBean.shipRequest.issno}" />
+	  		
+	  		<h:outputLabel for="shreqserialno" value="#{bundles.messages.serialnoLabel}: " />
+	  		<p:inputText id="shreqserialno" value="#{shipBean.shipRequest.serialno}" />
+	  		
+	  		<h:outputLabel for="shreqfoc" value="#{bundles.messages.focLabel}: " />
+	  		<p:selectOneMenu id="shreqfoc" value="#{shipBean.foc_username}">
+	  			<f:selectItems value="#{dropdownBean.focUsers}" />
+	  		</p:selectOneMenu>
+	  	</p:panelGrid>
+	  	
+		<p:panel id="reqItemstablePanel" style="width:80%">
+		<p:dataTable id="itemsTable" var="obj" value="#{shipBean.shipRequestItems}" style="width:100%">
+			<f:facet name="header">
+				Added items
+			</f:facet>
+			
+			<p:column sortBy="#{obj.item.name}" headerText="Item" filterBy="#{obj.item.name}" filterMatchMode="contains">
+				<h:outputText value="#{obj.item.name}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.item.requestedAmount}" headerText="Requested Amount">
+				<h:outputText value="#{obj.requestedAmount}" />
+			</p:column>
+			
+			<p:column headerText="Remove">
+				
+			</p:column>
+		</p:dataTable>
+		</p:panel>
+	  	
+	  	<p:panelGrid id="reqItem" columns="2" cellpadding="5" style="margin-bottom:10px;">
+	  		<h:outputLabel for="shreqitem" value="#{bundles.messages.itemLabel}: " />
+	  		<p:selectOneMenu id="shreqitem" value="#{shipBean.item_id}">
+	  			<f:selectItems value="#{dropdownBean.items}" var="it" itemLabel="#{it.name}" itemValue="#{it.id}" />
+	  		</p:selectOneMenu>
+	  		
+	  		<h:outputLabel for="shreqamt" value="#{bundles.messages.amtLabel}: " />
+	  		<p:inputText id="shreqamt" value="#{shipBean.requestedAmount}" />
+	  		
+	  		<f:facet name="footer">
+	  			<p:commandButton ajax="true" update="reqItemstablePanel,itemsTable,reqItem" action="#{shipBean.AddRequestItem}" value="#{bundles.messages.addAction}" icon="ui-icon-disk" style="margin:0"/>
+	  		</f:facet>
+	  	</p:panelGrid>
+	  	
+	  	<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{shipBean.SaveRequest}" outcome="shiprequest" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  	</p:panel>
+	</center>
+	</h:form>
+</ui:define>
+</ui:composition>

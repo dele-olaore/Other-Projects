@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MTN Drivers Odometer Tracker</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_dashboard">Enter Tracking Details</string>
+    <string name="title_activity_settings">Settings</string>
+
+</resources>

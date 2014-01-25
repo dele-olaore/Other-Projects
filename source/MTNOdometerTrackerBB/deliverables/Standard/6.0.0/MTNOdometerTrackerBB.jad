@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+MIDlet-Version: 1.0.0
+MIDlet-Jar-Size: 109277
+MIDlet-1: MTN Drivers Odometer Tracker,img/icon.png
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-Jar-URL: MTNOdometerTrackerBB.jar
+RIM-COD-Module-Dependencies: net_rim_cldc,net_rim_os,net_rim_json_org,net_rim_ui_api
+RIM-COD-URL-1: MTNOdometerTrackerBB.cod
+RIM-COD-SHA1-1: 79 7c 89 f7 4b fa 04 65 6f 37 74 cd 5e 83 0e 7a 18 10 e4 10
+RIM-MIDlet-Flags-1: 0
+RIM-COD-Size-1: 56848
+RIM-COD-Module-Name: MTNOdometerTrackerBB
+MIDlet-Name: MTNOdometerTrackerBB
+RIM-COD-Size: 9804
+RIM-COD-Creation-Time: 1378324182
+RIM-COD-URL: MTNOdometerTrackerBB.cod
+RIM-COD-SHA1: 13 e1 1b ba 9c 06 59 df 2c 82 75 f8 38 07 01 81 12 9c e4 f9
+MicroEdition-Profile: MIDP-2.0
+MIDlet-Vendor: deXter

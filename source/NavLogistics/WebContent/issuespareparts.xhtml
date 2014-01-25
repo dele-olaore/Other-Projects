@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:menuitem value="Issue Items for: #{shipBean.shipRequest.ship.name} (#{shipBean.shipRequest.ship.code})" outcome="issueitems" />
+		<p:menuitem value="Issue Parts for: #{shipBean.item.name}" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+	</p:breadCrumb>
+	
+	<center>
+		<p:panel id="selItemsPanel" style="width:80%" rendered="#{shipBean.itemWarehousesAddedCount.size() > 0}">
+			<p:dataTable id="selItemsTable" var="obj" value="#{shipBean.itemWarehousesAddedCount}" style="width:100%">
+				<f:facet name="header">
+					Added entries
+				</f:facet>
+				
+				<p:column sortBy="#{obj[0]}" headerText="Warehouse">
+					<h:outputText value="#{obj[0]}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj[1]}" headerText="Issued Amount">
+					<h:outputText value="#{obj[1]}" />
+				</p:column>
+				
+			</p:dataTable>
+			<f:facet name="footer">
+	  			<p:commandButton outcome="issueitems" action="#{shipBean.movetoissueitems}" value="#{bundles.messages.doneAction}" icon="ui-icon-check" style="margin:0"/>
+	  		</f:facet>
+	  		<br/>
+	  		<br/>
+		</p:panel>
+	
+		<p:panelGrid id="itemsWarehousePanel" columns="2" cellpadding="5" style="margin-bottom:10px;">
+			<h:outputLabel for="itemswarehouse" value="#{bundles.messages.warehouseLabel}:" />
+	  		<p:selectOneMenu id="itemswarehouse" value="#{shipBean.warehouse_id}">
+	  			<f:selectItems value="#{dropdownBean.allWarehouses}" var="wrh" itemLabel="#{wrh.name}" itemValue="#{wrh.id}" />
+	  		</p:selectOneMenu>
+	  		
+	  		<f:facet name="footer">
+	  			<p:commandButton ajax="true" action="#{shipBean.loadItems}" update="itemSparePsTable,itemSparePsPanel" value="#{bundles.messages.loadPartsAction}" icon="ui-icon-disk" style="margin:0"/>
+	  		</f:facet>
+		</p:panelGrid>
+	
+		<p:panel id="itemSparePsPanel" style="width:80%">
+			<p:dataTable id="itemSparePsTable" var="obj" value="#{shipBean.warehouseParts}"
+				paginator="true" rows="15"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Spareparts
+				</f:facet>
+				
+				<p:column headerText="">
+					<p:selectBooleanCheckbox value="#{obj.selected}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.serial_number}" headerText="Serial No.">
+					<h:outputText value="#{obj.serial_number}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.customized_number}" headerText="Customized No.">
+					<h:outputText value="#{obj.customized_number}" />
+				</p:column>
+				
+			</p:dataTable>
+			
+			<f:facet name="footer">
+	  			<p:commandButton ajax="false" action="#{shipBean.addItems}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+	  		</f:facet>
+		</p:panel>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

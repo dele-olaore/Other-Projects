@@ -1,0 +1,10 @@
+MIDlet-Name: MTNOdometerTrackerBB
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: deXter
+MIDlet-Jar-URL: MTNOdometerTrackerBB.jar
+MIDlet-Jar-Size: 0
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-1: MTN Drivers Odometer Tracker,img/icon.png,
+RIM-MIDlet-Flags-1: 0
+

@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form enctype="multipart/form-data">
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Items" outcome="items" />
+	</p:breadCrumb>
+	
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button"
+			rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and currentUser.role.type == 'Warehouse')}"/>
+	</td></tr>
+	</table>
+
+	<center>
+	<p:panel id="tablePanel" style="width:90%;">
+	<p:dataTable id="dataTable" var="obj" value="#{itemBean.items}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available items
+		</f:facet>
+		
+		<p:column sortBy="#{obj.name}" headerText="Item" filterBy="#{obj.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+			<h:outputText value="#{obj.code}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.description}" headerText="Description">
+			<h:outputText value="#{obj.description}" />
+		</p:column>
+		
+		<p:column headerText="Image">
+			<img src="#{request.contextPath}/imageservlet/#{obj.id}" style="width:150px;height:100px" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.supplier.name}" headerText="Supplier">
+			<h:outputText value="#{obj.supplier.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.barcode}" headerText="Barcode">
+			<img src="http://localhost:8080/barbecue/barcode?data=#{obj.barcode}&#38;height=50&#38;headless=false&#38;drawText=true" style="width:150px;height:40px" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink ajax="false" onclick="alert('Under Construction!');return false;" style="margin:0"
+				rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and currentUser.role.type == 'Warehouse')}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Item" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="itname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="itname" value="#{itemBean.item.name}" required="true" label="itname" />
+  		
+  		<h:outputLabel for="itcode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="itcode" value="#{itemBean.item.code}" required="true" label="itcode" />
+  		
+  		<h:outputLabel for="itdesc" value="#{bundles.messages.descLabel}:" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+  		<p:inputTextarea id="itdesc" value="#{itemBean.item.description}" label="itdesc" rows="3" cols="30" counter="counter" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+  		<h:outputText id="counter" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="itserino" value="Serial number:" />
+  		<p:inputText id="itserino" value="#{itemBean.item.serial_number}" />
+  		
+  		<h:outputLabel for="itsppn" value="Sparepart part number:" />
+  		<p:inputText id="itsppn" value="#{itemBean.item.sparepart_part_number}" />
+  		
+  		<h:outputLabel for="itremark" value="Remark:" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+  		<p:inputTextarea id="itremark" value="#{itemBean.item.remark}" rows="2" cols="30" counter="counter1" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+  		<h:outputText id="counter1" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="itimg" value="#{bundles.messages.imageLabel}:" />
+  		<p:fileUpload id="itimg" value="#{itemBean.item.imageFile}" mode="simple" />
+  		
+  		<h:outputLabel for="itsupplier" value="#{bundles.messages.supplierLabel}: *" />
+  		<p:selectOneMenu id="itsupplier" value="#{itemBean.item.supplier.id}">
+  			<f:selectItems value="#{dropdownBean.suppliers}" var="sp" itemLabel="#{sp.name}" itemValue="#{sp.id}" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="itbarcode" value="#{bundles.messages.barcodeLabel}: *" />
+  		<p:panelGrid columns="2" cellpadding="1" style="margin-bottom:10px;">
+  			<p:inputText id="itbarcode" value="#{itemBean.item.barcode}" label="itname" />
+  			<p:commandButton value="Generate..." actionListener="#{itemBean.generateBarcode}" outcome="items" update="itbarcode" ajax="true" />
+  		</p:panelGrid>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable,newDialog" action="#{itemBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

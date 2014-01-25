@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+<ui:insert name="metadata"/>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>#{bundles.messages.template_title}</title>
+	<link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+	<ui:insert name="head"/>
+</h:head>
+<h:body>
+
+<p:growl showDetail="true" sticky="true"/>
+
+<h:form>
+<p:menubar rendered="#{identity.loggedIn}">
+	<ui:repeat value="#{permManager.modules}" var="module">
+		<p:submenu label="#{module.data.name}" icon="ui-icon-document">
+			<ui:repeat value="#{permManager.getModuleFunctions(module.id)}" var="func">
+				<ui:fragment rendered="#{func.type == 'M'}">
+					<p:submenu label="#{func.data.name}" icon="ui-icon-contact">
+					<ui:repeat value="#{permManager.getSubModuleFunctions(func.id)}" var="func2">
+						<p:menuitem value="#{func2.data.name}" url="#" />
+						<p:separator />
+					</ui:repeat>
+					</p:submenu>
+				</ui:fragment>
+				<ui:fragment rendered="#{func.type == 'F'}">
+					<p:menuitem value="#{func.data.name}" url="#" />
+					<p:separator />
+				</ui:fragment>
+			</ui:repeat>
+		</p:submenu>
+	</ui:repeat>
+	<f:facet name="options">
+		<p:inputText style="margin-right:10px"/>
+		<p:commandButton value="Logout" ajax="false" action="#{identity.logout}" icon="ui-icon-extlink" />
+	</f:facet>
+</p:menubar>
+</h:form>
+
+<!-- Insert content here. Each page must identify their own content and design accordingly -->
+<ui:insert name="content"/>
+
+</h:body>
+</f:view>
+</html>

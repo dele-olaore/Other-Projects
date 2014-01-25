@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<table width="100%" height="550px">
+	<tr><td valign="middle" align="center">
+	
+	<h:graphicImage url="/images/navy_logo2.jpg" alt="" />
+	<br/><br/>
+	<h:form>
+		<p:panelGrid columns="2" style="margin-bottom:10px;">
+		<f:facet name="header">Authentication</f:facet>
+		
+  		<h:outputLabel for="uname" value="#{bundles.messages.home_usernameLabel}: *" />
+  		<p:inputText id="uname" value="#{credentials.username}" label="Username" />
+  		
+  		<h:outputLabel for="pword" value="#{bundles.messages.home_passwordLabel}: *" />
+  		<p:password id="pword" value="#{credentials.password}" required="true" label="Password"/>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{identity.login}" value="#{bundles.messages.home_loginAction}" icon="ui-icon-check" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</h:form>
+	</td></tr>
+	</table>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,344 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form enctype="multipart/form-data">
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="home" icon="ui-icon-star"/>
+		<p:menuitem value="Search" outcome="search"/>
+		<p:menuitem value="View Property" outcome="viewProperty"/>
+	</p:breadCrumb>
+	
+	<center>
+	<p:panelGrid columns="1" cellpadding="5">
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Geographical Characteristics</f:facet>
+		
+  		<h:outputLabel for="st" value="State: " />
+  		<h:outputText id="st" value="#{propertyMBean.property.state}" />
+  		
+  		<h:outputLabel for="lg" value="Local Govt. Area: " />
+  		<h:outputText id="lg" value="#{propertyMBean.property.lg}" />
+  		
+  		<h:outputLabel for="addr" value="Address: " />
+  		<h:outputText id="addr" value="#{propertyMBean.property.addr}" />
+  		
+  		<h:outputLabel for="ptype" value="Property Type: " />
+  		<h:outputText id="ptype" value="#{propertyMBean.property.type}" />
+  		
+  		<h:outputLabel for="pcode" value="Postal Code: " />
+  		<h:outputText id="pcode" value="#{propertyMBean.property.postalcode}" />
+  		
+  		<h:outputLabel value="GPS Coordinates: " />
+  		<p:panelGrid columns="2" cellpadding="2">
+  			<h:outputLabel for="lon" value="Longitude: " />
+  			<h:outputText id="lon" value="#{propertyMBean.property.lon}" />
+  			<h:outputLabel for="lat" value="Latitude: " />
+  			<h:outputText id="lat" value="#{propertyMBean.property.lat}" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="pru" value="Rural / Urban: " />
+  		<h:outputText id="pru" value="#{propertyMBean.property.rural}" />
+  		
+  		<h:outputLabel for="pexists" value="Exists?:* " />
+  		<h:outputText id="pexists" value="#{propertyMBean.property.place_exists}" />
+  		
+  		<h:outputLabel for="remarks" value="Remarks:* " />
+  		<h:outputText id="remarks" value="#{propertyMBean.property.remarks}" />
+  	</p:panelGrid>
+  	
+  	<p:outputPanel id="otherFields">
+  	<p:panelGrid columns="1" rendered="#{propertyMBean.property.place_exists == null or propertyMBean.property.place_exists == 'Yes'}">
+  	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Property Specifics</f:facet>
+		
+		<h:outputLabel for="tob" value="Type of building:" />
+		<h:outputText id="tob" value="#{propertyMBean.property.building_type}" />
+  		
+		<h:outputLabel value="Interior Photo:" />
+		<p:panelGrid columns="1" cellpadding="2">
+  			<img src="#{request.contextPath}/imageservlet/#{propertyMBean.property.id}:interior:#{propertyMBean.randomNumber}" style="width:200px;height:200px" />
+  			<p:commandButton onclick="intImgDlg.show();" update="intImgDialog" value="View Large" type="button" icon="ui-icon-search" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel value="Exterior Photo:" />
+  		<p:panelGrid columns="1" cellpadding="2">
+  			<img src="#{request.contextPath}/imageservlet/#{propertyMBean.property.id}:exterior:#{propertyMBean.randomNumber}" style="width:200px;height:200px" />
+  			<p:commandButton onclick="intImgDlg.show();" update="exImgDialog" value="View Large" type="button" icon="ui-icon-search" />
+		</p:panelGrid>
+		
+		<h:outputLabel for="oob" value="Ownership of building:" />
+		<h:outputText id="oob" value="#{propertyMBean.property.building_ownership}" />
+  		
+  		<h:outputLabel for="ool" value="Ownership of land" />
+  		<h:outputText id="ool" value="#{propertyMBean.property.land_ownership}" />
+  		
+  		<h:outputLabel for="byr" value="Year of building: " />
+  		<h:outputText id="byr" value="#{propertyMBean.property.building_year}" />
+  		
+  		<h:outputLabel for="lm2" value="Land size(in m2): " />
+  		<h:outputText id="lm2" value="#{propertyMBean.property.land_m2}" />
+  		
+  		<h:outputLabel for="outm2" value="Outline size(in m2): " />
+  		<h:outputText id="outm2" value="#{propertyMBean.property.outline_m2}" />
+  		
+  		<h:outputLabel for="mhm2" value="Mail handling size(in m2): " />
+  		<h:outputText id="mhm2" value="#{propertyMBean.property.mailspace_m2}" />
+  		
+  		<h:outputLabel for="ccm2" value="Counters and customers space size(in m2): " />
+  		<h:outputText id="ccm2" value="#{propertyMBean.property.ccspace_m2}" />
+  		
+  		<h:outputLabel for="ewm2" value="Entrance and waiting size(in m2): " />
+  		<h:outputText id="ewm2" value="#{propertyMBean.property.waiting_m2}" />
+  		
+  		<h:outputLabel for="bom2" value="Back office size(in m2): " />
+  		<h:outputText id="bom2" value="#{propertyMBean.property.backoffice_m2}" />
+  		
+  		<h:outputLabel for="numcounters" value="Number of counters (present): " />
+  		<h:outputText id="numcounters" value="#{propertyMBean.property.num_counters_p}" />
+  		
+  		<h:outputLabel for="numcountersf" value="Number of counters (functioning): " />
+  		<h:outputText id="numcountersf" value="#{propertyMBean.property.num_counters_f}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Condition of building</f:facet>
+		
+		<h:outputLabel for="condccs" value="Overall condition of the counter / customer space:" />
+		<h:outputText id="condccs" value="#{propertyMBean.property.ccspace_cond}" />
+  		
+  		<h:outputLabel for="condccs2" value="Is counter / customer space sufficient?:" />
+  		<h:outputText id="condccs2" value="#{propertyMBean.property.ccspace_cond2}" />
+  		
+  		<h:outputLabel value="Space Photo:" />
+		<p:panelGrid columns="1" cellpadding="2">
+  			<img src="#{request.contextPath}/imageservlet/#{propertyMBean.property.id}:ccspace:#{propertyMBean.randomNumber}" style="width:200px;height:200px" />
+  			<p:commandButton onclick="ccImgDlg.show();" update="ccImgDialog" value="View Large" type="button" icon="ui-icon-search" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="condbuild" value="Overall condition of building:" />
+  		<h:outputText id="condbuild" value="#{propertyMBean.property.building_cond}" />
+  		
+  		<h:outputLabel for="condbuild2" value="Is building sufficient?:" />
+  		<h:outputText id="condbuild2" value="#{propertyMBean.property.building_cond2}" />
+  		
+  		<h:outputLabel for="buildimg" value="Building Photo:" />
+		<p:panelGrid columns="1" cellpadding="2">
+  			<img src="#{request.contextPath}/imageservlet/#{propertyMBean.property.id}:building:#{propertyMBean.randomNumber}" style="width:200px;height:200px" />
+  			<p:commandButton onclick="bldImgDlg.show();" update="bldImgDialog" value="View Large" type="button" icon="ui-icon-search" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="renovcost" value="Estimate costs of renovation: " />
+  		<h:outputText id="renovcost" value="#{propertyMBean.property.renovation_cost}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Power supply</f:facet>
+		
+		<h:outputLabel for="phnccon" value="PHCN connection?:" />
+		<h:outputText id="phnccon" value="#{propertyMBean.property.phcn}" />
+  		
+  		<h:outputLabel for="solarcon" value="Solar power present?:" />
+  		<h:outputText id="solarcon" value="#{propertyMBean.property.solar}" />
+  		
+  		<h:outputLabel for="solarkwhs" value="How much Solar Kwhs?: " />
+  		<h:outputText id="solarkwhs" value="#{propertyMBean.property.solar_kwhs}" />
+  		
+  		<h:outputLabel for="gencon" value="Generator(s) present?:" />
+  		<h:outputText id="gencon" value="#{propertyMBean.property.generators}" />
+  		
+  		<h:outputLabel for="genkwhs" value="How much Generator Kwhs?: " />
+  		<h:outputText id="genkwhs" value="#{propertyMBean.property.generator_kwhs}" />
+  		
+  		<h:outputLabel for="neededkwhs" value="How much electricity in Kwhs is needed each working day?: " />
+  		<h:outputText id="neededkwhs" value="#{propertyMBean.property.needed_kwhs}" />
+  		
+  		<h:outputLabel for="provkwhs" value="How many hours per day (average) electricity is provided?: " />
+  		<h:outputText id="provkwhs" value="#{propertyMBean.property.provided_kwhs}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">ICT</f:facet>
+		
+		<h:outputLabel for="comp_f" value="Total number of functioning computers: " />
+  		<h:outputText id="comp_f" value="#{propertyMBean.property.functioning_comp}" />
+  		
+  		<h:outputLabel for="new_ram" value="Internal memory (RAM in Mbyte) of newest computer: " />
+  		<h:outputText id="new_ram" value="#{propertyMBean.property.newest_ramsize}" />
+  		
+  		<h:outputLabel for="new_procesor" value="Type of processor of newest computer (e.g. Pentium 4 or 5): " />
+  		<h:outputText id="new_procesor" value="#{propertyMBean.property.newest_processor}" />
+  		
+  		<h:outputLabel for="datacon_type" value="Type of communication/data-connection: " />
+  		<h:outputText id="datacon_type" value="#{propertyMBean.property.datacon_type}" />
+  		
+  		<h:outputLabel for="datacon_speed" value="Speed of connection (advertised by service provider): " />
+  		<h:outputText id="datacon_speed" value="#{propertyMBean.property.datacon_speed}" />
+  		
+  		<h:outputLabel for="land_phones" value="Number of office telephones - Land: " />
+  		<h:outputText id="land_phones" value="#{propertyMBean.property.land_phones}" />
+  		
+  		<h:outputLabel for="mobile_phones" value="Number of office telephones - Mobile: " />
+  		<h:outputText id="mobile_phones" value="#{propertyMBean.property.mobile_phones}" />
+  		
+  		<h:outputLabel for="fax_count" value="Number of fax machines: " />
+  		<h:outputText id="fax_count" value="#{propertyMBean.property.fax_count}" />
+  		
+  		<h:outputLabel for="photocopy_count" value="Number of photocopiers: " />
+  		<h:outputText id="photocopy_count" value="#{propertyMBean.property.photocopy_count}" />
+  		
+  		<h:outputLabel for="printer_count" value="Number of printers " />
+  		<h:outputText id="printer_count" value="#{propertyMBean.property.printer_count}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Security</f:facet>
+		
+		<h:outputLabel for="secstaff_count" value="Number of security staff / guards: " />
+  		<h:outputText id="secstaff_count" value="#{propertyMBean.property.secstaff_count}" />
+		
+		<h:outputLabel for="sec_provider" value="Provider of security:" />
+		<h:outputText id="sec_provider" value="#{propertyMBean.property.sec_provider}" />
+  		
+  		<h:outputLabel for="sec_provider_other" value="Name of other security provider: " />
+  		<h:outputText id="sec_provider_other" value="#{propertyMBean.property.sec_provider_other}" />
+  		
+  		<h:outputLabel for="strongroom" value="Has Strongroom?: " />
+  		<h:outputText id="strongroom" value="#{propertyMBean.property.strongroom}" />
+  		
+  		<h:outputLabel for="safes_count" value="Number of safes: " />
+  		<h:outputText id="safes_count" value="#{propertyMBean.property.safes_count}" />
+  		
+  		<h:outputLabel for="safes_brand" value="Brand and type of safes: " />
+  		<h:outputText id="safes_brand" value="#{propertyMBean.property.safes_brand}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Customer Service</f:facet>
+		
+		<h:outputLabel for="week_workhours" value="Average work hours per week: " />
+  		<h:outputText id="week_workhours" value="#{propertyMBean.property.week_workhours}" />
+  		
+  		<h:outputLabel for="open_time" value="Opening times - From: " />
+  		<h:outputText id="open_time" value="#{propertyMBean.property.open_time}" />
+  		
+  		<h:outputLabel for="close_time" value="Opening times - To: " />
+  		<h:outputText id="close_time" value="#{propertyMBean.property.close_time}" />
+  		
+  		<h:outputLabel for="cus_perday" value="Average number of customers - Per day: " />
+  		<h:outputText id="cus_perday" value="#{propertyMBean.property.cus_perday}" />
+  		
+  		<h:outputLabel for="cus_perweek" value="Average number of customers - Per week: " />
+  		<h:outputText id="cus_perweek" value="#{propertyMBean.property.cus_perweek}" />
+  		
+  		<h:outputLabel for="trans_perweek" value="Total number of transactions per week: " />
+  		<h:outputText id="trans_perweek" value="#{propertyMBean.property.trans_perweek}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Products / services offered</f:facet>
+		
+		<h:outputLabel for="post_cash" value="Post cash: " />
+  		<h:outputText id="post_cash" value="#{propertyMBean.property.post_cash}" />
+  		
+  		<h:outputLabel for="stamps" value="Stamps: " />
+  		<h:outputText id="stamps" value="#{propertyMBean.property.stamps}" />
+  		
+  		<h:outputLabel for="letter_box" value="Letter box: " />
+  		<h:outputText id="letter_box" value="#{propertyMBean.property.letter_box}" />
+  		
+  		<h:outputLabel for="po_box" value="PO box: " />
+  		<h:outputText id="po_box" value="#{propertyMBean.property.po_box}" />
+  		
+  		<h:outputLabel for="ems" value="EMS: " />
+  		<h:outputText id="ems" value="#{propertyMBean.property.ems}" />
+  		
+  		<h:outputLabel for="parcels" value="Parcels: " />
+  		<h:outputText id="parcels" value="#{propertyMBean.property.parcels}" />
+  		
+  		<h:outputLabel for="philately" value="Philately: " />
+  		<h:outputText id="philately" value="#{propertyMBean.property.philately}" />
+  		
+  		<h:outputLabel for="public_internet" value="Public internet access: " />
+  		<h:outputText id="public_internet" value="#{propertyMBean.property.public_internet}" />
+  		
+  		<h:outputLabel for="public_phone" value="Public phone: " />
+  		<h:outputText id="public_phone" value="#{propertyMBean.property.public_phone}" />
+  		
+  		<h:outputLabel for="customs" value="Customs present: " />
+  		<h:outputText id="customs" value="#{propertyMBean.property.customs}" />
+  		
+  		<h:outputLabel for="netpost" value="Netpost services: " />
+  		<h:outputText id="netpost" value="#{propertyMBean.property.netpost}" />
+  		
+  		<h:outputLabel for="cards_office_supplies" value="Cards / office supplies: " />
+  		<h:outputText id="cards_office_supplies" value="#{propertyMBean.property.cards_office_supplies}" />
+  		
+  		<h:outputLabel for="atm" value="ATM: " />
+  		<h:outputText id="atm" value="#{propertyMBean.property.atm}" />
+  		
+  		<h:outputLabel for="others_offered" value="Other products / services offered: " />
+  		<h:outputText id="others_offered" value="#{propertyMBean.property.others_offered}" />
+		
+	</p:panelGrid>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="width:600px;margin-bottom:10px;">
+		<f:facet name="header">Staff</f:facet>
+		
+		<h:outputLabel for="staffs_count" value="Total number of staff: " />
+  		<h:outputText id="staffs_count" value="#{propertyMBean.property.staffs_count}" />
+  		
+  		<h:outputLabel for="clerks_count" value="Number of counter clerks: " />
+  		<h:outputText id="clerks_count" value="#{propertyMBean.property.clerks_count}" />
+  		
+  		<h:outputLabel for="staff_with_diploma_count" value="Number of staff with diplome/certificate computer literacy: " />
+  		<h:outputText id="staff_with_diploma_count" value="#{propertyMBean.property.staff_with_diploma_count}" />
+  		
+  		<h:outputLabel for="institute" value="Which diploma and institute: " />
+  		<h:outputText id="institute" value="#{propertyMBean.property.institute}" />
+  		
+  	</p:panelGrid>
+  	</p:panelGrid>
+  	</p:outputPanel>
+  	</p:panelGrid>
+	</center>
+	
+	<p:dialog id="intImgDialog" header="Interior Photo" widgetVar="intImgDlg" width="400px" height="500px" dynamic="true">  
+		<p:panelGrid columns="1" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header">Interior Photo</f:facet>
+		<p:graphicImage value="#{propertyMBean.interiorImage}" rendered="#{propertyMBean.interiorImage != null}" />
+		</p:panelGrid>
+	</p:dialog>
+	
+	<p:dialog id="exImgDialog" header="Exterior Photo" widgetVar="exImgDlg" width="400px" height="500px" dynamic="true">  
+		<p:panelGrid columns="1" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		<p:graphicImage value="#{propertyMBean.exteriorImage}" rendered="#{propertyMBean.exteriorImage != null}" />
+		</p:panelGrid>
+	</p:dialog>
+	
+	<p:dialog id="ccImgDialog" header="CCSpace Photo" widgetVar="ccImgDlg" width="400px" height="500px" dynamic="true">  
+		<p:panelGrid columns="1" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		<p:graphicImage value="#{propertyMBean.ccspaceImage}" rendered="#{propertyMBean.ccspaceImage != null}" />
+		</p:panelGrid>
+	</p:dialog>
+	
+	<p:dialog id="bldImgDialog" header="Building Photo" widgetVar="bldImgDlg" width="400px" height="500px" dynamic="true">  
+		<p:panelGrid columns="1" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		<p:graphicImage value="#{propertyMBean.buildImage}" rendered="#{propertyMBean.buildImage != null}" />
+		</p:panelGrid>
+	</p:dialog>
+	</h:form>
+</ui:define>
+</ui:composition>

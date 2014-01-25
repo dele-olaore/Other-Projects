@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Warehouses" outcome="warehouses" />
+	</p:breadCrumb>
+
+	<table style="width: 100%;">
+	<tr><td align="right">
+		<p:commandButton id="newDialogButton" value="New" icon="ui-icon-document" onclick="dlg.show();" type="button" rendered="#{currentUser.role.name == 'Administrator'}"/>
+	</td></tr>
+	</table>
+
+	<center>
+	<p:panel id="tablePanel" style="width:80%;horizontal-textalign:center">
+	<p:dataTable id="dataTable" var="obj" value="#{warehouseBean.warehousesList}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Available warehouses
+		</f:facet>
+
+		<p:column sortBy="#{obj.name}" headerText="Warehouse" filterBy="#{obj.name}" filterMatchMode="contains">
+			<h:outputText value="#{obj.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+			<h:outputText value="#{obj.code}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.address}" headerText="Address">
+			<h:outputText value="#{obj.address}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.location.name}" headerText="Location" filterBy="#{obj.location.name}" filterMatchMode="exact"
+			filterOptions="#{dropdownBean.locationsSelect}">
+			<h:outputText value="#{obj.location.name}" />
+		</p:column>
+
+		<p:column headerText="Settings">
+			<p:commandLink action="#{warehouseBean.movetosettings(obj.id)}" immediate="true" outcome="warehousesettings" style="margin-right:20px;" ajax="false"
+				rendered="#{currentUser.role.name == 'Administrator' or currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics'}">
+				<h:outputText value="Settings" />
+			</p:commandLink>
+		</p:column>
+		
+		<p:column headerText="Inventory">
+			<p:commandLink action="#{warehouseBean.movetoinventory(obj.id)}" immediate="true" outcome="warehouseinventory" style="margin-right:20px;" ajax="false">
+				<h:outputText value="View Inventory" />
+			</p:commandLink>
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandLink action="#{warehouseBean.movetoupdate(obj.id)}" immediate="true" outcome="warehouse_edit" style="margin-right:20px;" ajax="false"
+				rendered="#{currentUser.role.name == 'Administrator'}">
+				<h:outputText value="Update" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<p:dialog id="newDialog" header="New Warehouse" widgetVar="dlg" modal="true" dynamic="true">  
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="wname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="wname" value="#{warehouseBean.warehouse.name}" required="true" label="wname" />
+  		
+  		<h:outputLabel for="wcode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="wcode" value="#{warehouseBean.warehouse.code}" required="true" label="wcode" />
+  		
+  		<h:outputLabel for="waddr" value="#{bundles.messages.addressLabel}: *" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+  		<p:inputTextarea id="waddr" value="#{warehouseBean.warehouse.address}" label="waddr" rows="5" cols="30" counter="counter" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+  		<h:outputText id="counter" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="wloc" value="#{bundles.messages.locationLabel}: *" />
+  		<p:selectOneMenu id="wloc" value="#{warehouseBean.location_id}">
+  			<f:selectItems value="#{dropdownBean.locations}" var="loc" itemLabel="#{loc.name}" itemValue="#{loc.id}" />
+  		</p:selectOneMenu>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="true" update="tablePanel,dataTable,newDialog" action="#{warehouseBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</p:dialog>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

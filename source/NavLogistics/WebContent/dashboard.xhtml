@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+<h:form>
+	<center>
+	<p:dashboard id="board" model="#{dashboardBean.model}">
+		<p:panel id="warehouses" header="Warehouses" 
+			rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and (currentUser.role.type == 'Warehouse' or currentUser.role.type == 'Global'))}">
+			<p:dataTable id="warehousesTable" var="obj" value="#{warehouseBean.warehousesList}"
+				paginator="true" rows="15"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Available warehouses
+				</f:facet>
+		
+				<p:column sortBy="#{obj.name}" headerText="Warehouse" filterBy="#{obj.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.name}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+					<h:outputText value="#{obj.code}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.location.name}" headerText="Location" filterBy="#{obj.location.name}" filterMatchMode="exact"
+					filterOptions="#{dropdownBean.locationsSelect}">
+					<h:outputText value="#{obj.location.name}" />
+				</p:column>
+		
+				<p:column headerText="Inventory">
+					<p:commandLink action="#{warehouseBean.movetoinventory(obj.id)}" immediate="true" outcome="warehouseinventory" style="margin-right:20px;" ajax="false">
+						<h:outputText value="View Inventory" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+		
+		<p:panel id="ships" header="Ships"
+			rendered="#{currentUser.role.name == 'Administrator' or ((currentUser.role.name == 'Store Personnel' or currentUser.role.name == 'Logistics') and (currentUser.role.type == 'Ship' or currentUser.role.type == 'Global'))}">
+			<p:dataTable id="shipsTable" var="obj" value="#{shipBean.ships}"
+				paginator="true" rows="15"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Available ships
+				</f:facet>
+				
+				<p:column sortBy="#{obj.name}" headerText="Ship" filterBy="#{obj.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.name}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.code}" headerText="Code" filterBy="#{obj.code}" filterMatchMode="contains">
+					<h:outputText value="#{obj.code}" />
+				</p:column>
+				
+				<p:column headerText="Inventory">
+					<p:commandLink action="#{shipBean.movetoinventory(obj.id)}" immediate="true" outcome="shipinventory" style="margin-right:20px;" ajax="false">
+						<h:outputText value="View Inventory" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+		
+		<p:panel id="users" header="Users"
+			rendered="#{currentUser.role.name == 'Administrator'}">
+			<p:dataTable id="usersTable" var="obj" value="#{userBean.users}"
+				paginator="true" rows="15"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Available users
+				</f:facet>
+				
+				<p:column sortBy="#{obj.username}" headerText="User name" filterBy="#{obj.username}" filterMatchMode="contains">
+					<h:outputText value="#{obj.username}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.firstname}" headerText="First name" filterBy="#{obj.firstname}" filterMatchMode="contains">
+					<h:outputText value="#{obj.firstname}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.lastname}" headerText="Last name" filterBy="#{obj.lastname}" filterMatchMode="contains">
+					<h:outputText value="#{obj.lastname}" />
+				</p:column>
+				
+				<p:column headerText="Phone">
+					<h:outputText value="#{obj.phone}" />
+				</p:column>
+				
+				<p:column headerText="Email">
+					<h:outputText value="#{obj.email}" />
+				</p:column>
+				
+				<p:column headerText="Type">
+					<h:outputText value="#{obj.role.type}" />
+				</p:column>
+				
+				<p:column headerText="Role">
+					<h:outputText value="#{obj.role.name}" />
+				</p:column>
+				
+				<p:column headerText="Action">
+					
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</p:dashboard>
+	</center>
+
+	<p:dock>
+		<p:menuitem value="Locations" icon="images/home.png" ajax="false" outcome="locations" action="#{dashboardBean.gotoPage('locations')}"/>
+		<p:menuitem value="Warehouses" icon="images/portfolio.png" ajax="false" outcome="warehouses" action="#{dashboardBean.gotoPage('warehouses')}"/>
+		<p:menuitem value="Ships" icon="images/link.png" ajax="false" outcome="ships" action="#{dashboardBean.gotoPage('ships')}"/>
+	</p:dock>
+	
+	<p:stack icon="images/stack.png">
+		<p:menuitem value="Warehouses Inventory" ajax="false" icon="ui-icon-document" action="#{dashboardBean.gotoPage('mngwarehousesinventory')}" outcome="mngwarehousesinventory" />
+		<p:menuitem value="Ships Inventory" ajax="false" icon="ui-icon-document" action="#{dashboardBean.gotoPage('mngshipsinventory')}" outcome="mngshipsinventory" />
+	</p:stack>
+</h:form>
+</ui:define>
+</ui:composition>

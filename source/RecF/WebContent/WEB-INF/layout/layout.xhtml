@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+<ui:insert name="metadata"/>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>#{bundles.messages.template_title}</title>
+	<link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+	<link href='http://fonts.googleapis.com/css?family=Cuprum' rel='stylesheet' type='text/css' />
+	<link href='css/main.css' rel='stylesheet' type='text/css' />
+	<ui:insert name="head"/>
+</h:head>
+<h:body>
+<!-- Top navigation bar -->
+<div id="topNav">
+    <div class="fixed">
+        <div class="wrapper">
+        <h:form>
+        	<div class="welcome"><a href="#" title="" onclick="return false;"><h:graphicImage url="/images/userPic.png" alt="" rendered="#{identity.loggedIn}" /></a><span><h:outputText value="#{currentUser.username}!" rendered="#{identity.loggedIn}" /><h:outputText value="#{bundles.messages.template_linkLoginMsg}" rendered="#{not identity.loggedIn}" /></span></div>
+            <div class="userNav">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li><h:commandLink action="#{identity.logout}" rendered="#{identity.loggedIn}" title="Logout"><h:graphicImage url="/images/icons/topnav/logout.png" alt="Logout" rendered="#{identity.loggedIn}" /><span><h:outputText value="#{bundles.messages.template_linkLogout}" rendered="#{identity.loggedIn}" /></span></h:commandLink></li><!--  -->
+                </ul>
+            </div>
+            <div class="fix"></div>
+        </h:form>
+        </div>
+    </div>
+</div>
+
+<!-- Insert content here. Each page must identify their own content and design accordingly -->
+<ui:insert name="content"/>
+
+<!-- Footer -->
+<div id="footer">
+	<div class="wrapper">
+    	<span>&copy; #{bundles.messages.template_footerMsg} #{bundles.messages.template_footerMsg2} <a href="http://www.dexterapps.com" title="#{bundles.messages.template_footerVisitUs}" onclick="window.open('http://www.dexterapps.com');return false;">#{bundles.messages.template_footerUs}</a></span>
+    </div>
+</div>
+
+</h:body>
+</f:view>
+</html>

@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Warehouses" outcome="warehouses" />
+		<p:menuitem value="#{warehouseBean.warehouse.name} Inventory" outcome="warehouseinventory" />
+		<p:menuitem value="#{warehouseBean.item.name} Spareparts" outcome="warehousespareparts" />
+	</p:breadCrumb>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+		<p:dataTable id="viewTable" var="obj" value="#{warehouseBean.itemSpareparts}"
+			paginator="true" rows="15"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15" style="width:100%">
+			<f:facet name="header">
+				Spareparts of item: <h:outputText value="#{warehouseBean.item.name}" /> in warehouse: <h:outputText value="#{warehouseBean.warehouse.name}" />
+			</f:facet>
+				
+			<p:column sortBy="#{obj.serial_number}" headerText="Serial No." filterBy="#{obj.serial_number}" filterMatchMode="contains">
+				<h:outputText value="#{obj.serial_number}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.customized_number}" headerText="Serial No." filterBy="#{obj.customized_number}" filterMatchMode="contains">
+				<h:outputText value="#{obj.customized_number}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.itemSupply.container_number}" headerText="Container No.">
+				<h:outputText value="#{obj.itemSupply.container_number}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.itemSupply.rack}" headerText="Rack">
+				<h:outputText value="#{obj.itemSupply.rack}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.itemSupply.rack_number}" headerText="Rack No.">
+				<h:outputText value="#{obj.itemSupply.rack_number}" />
+			</p:column>
+			
+		</p:dataTable>
+	</p:panel>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

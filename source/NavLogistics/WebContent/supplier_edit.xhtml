@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Suppliers" outcome="suppliers" />
+		<p:menuitem value="Update" outcome="supplier_edit" />
+	</p:breadCrumb>
+	
+	<center>
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="spname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="spname" value="#{supplierBean.supplier.name}" required="true" label="spname" />
+  		
+  		<h:outputLabel for="spcode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="spcode" value="#{supplierBean.supplier.code}" required="true" label="spcode" />
+  		
+  		<h:outputLabel for="spaddr" value="#{bundles.messages.addressLabel}:" />
+  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+  		<p:inputTextarea id="spaddr" value="#{supplierBean.supplier.address}" label="itdesc" rows="5" cols="30" counter="counter" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+  		<h:outputText id="counter" />
+  		</p:panelGrid>
+  		
+  		<h:outputLabel for="spphone" value="#{bundles.messages.phoneLabel}:" />
+  		<p:inputText id="spphone" value="#{supplierBean.supplier.phone}" label="spphone" />
+  		
+  		<h:outputLabel for="spemail" value="#{bundles.messages.emailLabel}:" />
+  		<p:inputText id="spemail" value="#{supplierBean.supplier.email}" label="spemail" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{supplierBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

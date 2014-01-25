@@ -1,0 +1,46 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        contentType="text/html"
+        renderKitId="PRIMEFACES_MOBILE">
+<pm:page title="#{message.Title}">
+    <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+	<style type="text/css">
+		body {
+			background: url(#{request.contextPath}/images/macback.png);
+			margin: 0;
+			padding: 0;
+			font-family: geneva, arial, helvetica, sans-serif;
+			font-size:70%;
+		}
+
+		.ui-menuitem-icon.ui-icon.appleIcon {
+			background: url(../../images/apple.png) no-repeat;
+            width:16px;
+            height:16px;
+            border-radius:0px;
+		}
+
+        .ui-dialog .ui-terminal {
+            border:0;
+        }
+
+        .ui-dialog.terminalDialog .ui-dialog-content {
+            padding:0;
+        }
+	</style>
+	<ui:insert name="head"/>
+	
+	<!-- Main View -->
+	<pm:view id="main">
+		<pm:header title="" swatch="b" />
+		<pm:content>
+			<ui:insert name="content"/>
+		</pm:content>
+	</pm:view>
+</pm:page>
+</f:view>

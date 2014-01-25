@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Items Warehouse Report" action="#{itemBean.movetoitemsreport}" outcome="items_report" />
+	</p:breadCrumb>
+	
+	<center>
+		<br/>
+		<p:panel id="reportPanel" style="width:100%" rendered="#{itemBean.report != null and itemBean.report.size() > 0}">
+			<p:dataTable id="reportTable" var="obj" value="#{itemBean.report}" style="width:100%" rendered="#{itemBean.report != null}">
+				<f:facet name="header">
+					Report
+				</f:facet>
+				
+				<p:column headerText="Cus. No.">
+					<h:outputText value="#{obj.item.customized_part_number}" />
+				</p:column>
+				
+				<p:column headerText="Serial">
+					<h:outputText value="#{obj.item.serial_number}" />
+				</p:column>
+				
+				<p:column headerText="Sparepart No.">
+					<h:outputText value="#{obj.item.sparepart_part_number}" />
+				</p:column>
+				
+				<p:column headerText="Description">
+					<h:outputText value="#{obj.item.description}" />
+				</p:column>
+				
+				<p:column headerText="Max">
+					<h:outputText value="#{obj.settings.max_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Issued">
+					<h:outputText value="#{obj.qtyIssued}" />
+				</p:column>
+				
+				<p:column headerText="Min">
+					<h:outputText value="#{obj.settings.min_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Re-order">
+					<h:outputText value="#{obj.settings.reorder_lvl}" />
+				</p:column>
+				
+				<p:column headerText="Image">
+					<img src="#{request.contextPath}/imageservlet/#{obj.item.id}" style="width:150px;height:100px" />
+				</p:column>
+				
+				<p:column headerText="Location">
+					<h:outputText value="Container no: #{obj.supply.container_number}, Rack: #{obj.supply.rack}, Rack no: #{obj.supply.rack_number}" />
+				</p:column>
+				
+				<p:column headerText="Remark">
+					<h:outputText value="#{obj.item.remark}" />
+				</p:column>
+				
+			</p:dataTable>
+	  		<br/>
+	  		<br/>
+	  		<br/>
+		</p:panel>
+	
+		<p:panelGrid id="reportWarehousePanel" columns="2" cellpadding="5" style="margin-bottom:10px;">
+			<h:outputLabel for="reportwarehouse" value="#{bundles.messages.warehouseLabel}:" />
+	  		<p:selectOneMenu id="reportwarehouse" value="#{itemBean.warehouse_id}">
+	  			<f:selectItems value="#{dropdownBean.allWarehouses}" var="wrh" itemLabel="#{wrh.name}" itemValue="#{wrh.id}" />
+	  		</p:selectOneMenu>
+	  		
+	  		<f:facet name="footer">
+	  			<p:commandButton ajax="false" action="#{itemBean.movetoitemsreport}" outcome="items_report" value="#{bundles.messages.loadPartsAction}" icon="ui-icon-disk" style="margin:0"/>
+	  		</f:facet>
+		</p:panelGrid>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

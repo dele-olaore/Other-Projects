@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form id="searchForm">
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Ships" outcome="ships" />
+		<p:menuitem value="#{shipBean.ship.name} Inventory" outcome="shipinventory" />
+		<p:menuitem value="Items Usage Report" outcome="ship_itemsusagereport" />
+	</p:breadCrumb>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:80%">
+	<p:dataTable id="dataTable" var="obj" value="#{shipBean.shipItemsUseList}"
+		paginator="true" rows="15"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%">
+		<f:facet name="header">
+			Usage Reports
+		</f:facet>
+		
+		<p:column sortBy="#{obj.usedate}" headerText="Date">
+			<h:outputText value="#{obj.usedate}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.ship.name}" headerText="Ship">
+			<h:outputText value="#{obj.ship.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.item.name}" headerText="Item">
+			<h:outputText value="#{obj.item.name}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.itemsCount}" headerText="Count">
+			<h:outputText value="#{obj.itemsCount}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.remark}" headerText="Remark">
+			<h:outputText value="#{obj.remark}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.user.firstname}" headerText="Submitted by">
+			<h:outputText value="#{obj.user.firstname} #{obj.user.lastname}" />
+		</p:column>
+		
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<br/><br/>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header">Search details</f:facet>
+		
+		<h:outputLabel for="sdate1" value="Start date: *" />
+  		<p:calendar value="#{shipBean.useDate1}" id="sdate1" showOn="button" required="true" />
+  		
+  		<h:outputLabel for="sdate2" value="End date: *" />
+  		<p:calendar value="#{shipBean.useDate2}" id="sdate2" showOn="button" required="true" />
+		
+		<f:facet name="footer">
+			<p:commandButton ajax="false" action="#{shipBean.UsageSearch}" value="Search" icon="ui-icon-search" style="margin:0"/>
+		</f:facet>
+	</p:panelGrid>
+	</h:form>
+</ui:define>
+</ui:composition>

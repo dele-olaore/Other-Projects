@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:menuitem value="Request form for ship: #{shipBean.shipRequest.ship.name} (#{shipBean.shipRequest.ship.code})" outcome="shiprequest_table" />
+	</p:breadCrumb>
+	
+		<center>
+			<p:panel style="width:100%">
+			<table style="width:80%" border="1">
+				<tr>
+					<td align="left" width="25%">Requesting unit:<br/>#{shipBean.shipRequest.requesting_unit}</td>
+					<td align="center" width="50%"><h2>Sparepart request</h2></td>
+					<td align="right" width="25%">Date:<br/>#{shipBean.shipRequest.date}</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<table width="100%">
+							<tr>
+								<td>
+									Requested for<br/>
+									#{shipBean.shipRequest.ship.name}
+								</td>
+								<td>
+									Equipment:<br/>
+									#{shipBean.shipRequest.equipment}
+								</td>
+								<td>
+									SEL No<br/>
+									#{shipBean.shipRequest.selno}
+								</td>
+								<td>
+									ISS No<br/>
+									#{shipBean.shipRequest.issno}
+								</td>
+								<td>
+									Serial No<br/>
+									#{shipBean.shipRequest.serialno}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<p:dataTable id="requestItemsTable" var="obj" value="#{shipBean.selRequestItems}" style="width:480px" dynamic="true">
+							<p:column sortBy="#{obj.item.name}" headerText="Item">
+								<h:outputText value="#{obj.item.name}" />
+							</p:column>
+							
+							<p:column sortBy="#{obj.requestedAmount}" headerText="Req Qty">
+								<h:outputText value="#{obj.requestedAmount}" />
+							</p:column>
+							
+							<p:column sortBy="#{obj.requestedAmount}" headerText="Issued Qty">
+								
+							</p:column>
+						</p:dataTable>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<table width="100%">
+							<tr>
+								<td width="25%">
+									<fieldset>
+										<legend>Requested by</legend>
+										Name:<br/>
+										<h:outputText value="#{shipBean.shipRequest.requestedBy.firstname} #{shipBean.shipRequest.requestedBy.lastname}" rendered="#{shipBean.shipRequest.requestedBy != null}" />
+										<br/>
+										Date:<br/>
+										<h:outputText value="#{shipBean.shipRequest.date}" rendered="#{shipBean.shipRequest.requestedBy != null}" />
+									</fieldset>
+								</td>
+								<td width="25%">
+									<fieldset>
+										<legend>Approved by</legend>
+										Name:<br/>
+										<h:outputText value="#{shipBean.shipRequest.approvedBy.firstname} #{shipBean.shipRequest.approvedBy.lastname}" rendered="#{shipBean.shipRequest.approvalFlag}" />
+										<br/>
+										Date:<br/>
+										<h:outputText value="#{shipBean.shipRequest.approvalDate}" rendered="#{shipBean.shipRequest.approvalFlag}" />
+									</fieldset>
+								</td>
+								<td width="25%">
+									<fieldset>
+										<legend>Issued by</legend>
+										Name:<br/>
+										<h:outputText value="#{shipBean.shipRequest.issuedBy.firstname} #{shipBean.shipRequest.issuedBy.lastname}" rendered="#{shipBean.shipRequest.issuedDate != null}" />
+										<br/>
+										Date:<br/>
+										<h:outputText value="#{shipBean.shipRequest.issuedDate}" rendered="#{shipBean.shipRequest.issuedDate != null}" />
+									</fieldset>
+								</td>
+								<td width="25%">
+									<fieldset>
+										<legend>Received by</legend>
+										Name:<br/>
+										<h:outputText value="#{shipBean.shipRequest.receivedBy.firstname} #{shipBean.shipRequest.receivedBy.lastname}" rendered="#{shipBean.shipRequest.receivedDate != null}" />
+										<br/>
+										Date:<br/>
+										<h:outputText value="#{shipBean.shipRequest.receivedDate}" rendered="#{shipBean.shipRequest.receivedDate != null}" />
+									</fieldset>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			</p:panel>
+		</center>
+	</h:form>
+</ui:define>
+</ui:composition>

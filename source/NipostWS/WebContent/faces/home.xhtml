@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="head">
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+</ui:define>
+<ui:define name="content">
+<f:view contentType="text/html">
+	
+	<h:form>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header">Search details</f:facet>
+		
+  		<h:outputLabel for="st" value="State: " />
+  		<p:selectOneMenu id="st" value="#{propertyMBean.state}">
+  			<f:selectItem itemLabel="All" itemValue="" />
+  			<f:selectItems value="#{dropdownMBean.states}" var="shp" itemLabel="#{shp.name}" itemValue="#{shp.name}" />
+  			<p:ajax update="lg" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="lg" value="Local Govt. Area: " />
+  		<p:selectOneMenu id="lg" value="#{propertyMBean.lg}">
+  			<f:selectItems value="#{dropdownMBean.getLgs(propertyMBean.state)}" var="shp" itemLabel="#{shp.name}" itemValue="#{shp.name}" />
+  		</p:selectOneMenu>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="prosMap" action="#{propertyMBean.resetMap}" value="#{message.searchAction}" icon="ui-icon-search" style="margin:0"/>
+  		</f:facet>
+  	</p:panelGrid>
+	
+	<!-- rendered="#{request.session.getAttribute('user').email == 'dele.olaore@gmail.com' or request.session.getAttribute('user').email == 'victorokere@gmail.com'}" -->
+	<center>
+	<p:gmap id="prosMap" center="#{propertyMBean.cenCoords}" zoom="6" type="HYBRID" style="width:700px;height:550px" model="#{propertyMBean.simpleModel}">
+		<p:ajax event="overlaySelect" listener="#{propertyMBean.onMarkerSelect}" update=":glow" />
+	</p:gmap>
+	</center>
+	</h:form>
+</f:view>
+</ui:define>
+</ui:composition>

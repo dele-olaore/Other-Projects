@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Locations" outcome="locations" />
+		<p:menuitem value="Update" outcome="location_edit" />
+	</p:breadCrumb>
+	<center>
+		<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header"></f:facet>
+		
+  		<h:outputLabel for="locname" value="#{bundles.messages.nameLabel}: *" />
+  		<p:inputText id="locname" value="#{locationBean.location.name}" required="true" label="locname" />
+  		
+  		<h:outputLabel for="loccode" value="#{bundles.messages.codeLabel}: *" />
+  		<p:inputText id="loccode" value="#{locationBean.location.code}" required="true" label="loccode" />
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" action="#{locationBean.SaveUpdate}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  		</p:panelGrid>
+  	</center>
+	</h:form>
+</ui:define>
+</ui:composition>

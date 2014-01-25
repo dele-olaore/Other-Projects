@@ -1,0 +1,407 @@
+<html class="no-js" lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="utf-8"/>
+		<!-- DNS prefetch -->
+		<link rel="dns-prefetch" href="//fonts.googleapis.com"/>
+		<!-- Use the .htaccess and remove these lines to avoid edge case issues.
+		More info: h5bp.com/b/378 -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		
+		<title>Nigeria Immigration Service - Biometrics Data Collection/Review Portal</title>
+		<meta name="description" content=""/>
+		<meta name="author" content="deXter"/>
+		
+		<!-- Mobile viewport optimized: j.mp/bplateviewport -->
+		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+		
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: geneva, arial, helvetica, sans-serif;
+				font-size:70%;
+			}
+	
+	        .ui-dialog .ui-terminal {
+	            border:0;
+	        }
+	
+	        .ui-dialog.terminalDialog .ui-dialog-content {
+	            padding:0;
+	        }
+	        
+	        .topAligned td {
+	        	vertical-align: top;
+	        }
+	        
+			.ui-widget, .ui-widget .ui-widget, .ui-state-default, .ui-widget-content {
+				font-size: 12px !important;
+			}
+		</style>
+	</h:head>
+	<h:body>
+		<p:growl id="messages" sticky="true" showDetail="true" />
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+		<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+			<p:graphicImage value="/images/ajax-loader.gif" />
+		</p:dialog>
+		<h:form id="form">
+		<table style="width:100%">
+			<tr valign="top">
+				<td height="600px" align="center">
+					<img src="/BioDataWeb/images/coatArmNig2.gif" style="width:100px;height:90px" />
+					<h2>Nigeria Immigration Service Biometrics Data Collection/Review Portal</h2>
+					<p:outputPanel id="OPanel" style="width:100%;">
+						<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;" rendered="#{biodataBean.curUser == null}">
+							<h:outputLabel for="usrnm" value="Email / Username: *" />
+							<p:inputText id="usrnm" value="#{biodataBean.username}" />
+							
+							<h:outputLabel for="usrpwd" value="Password: *" />
+							<p:password id="usrpwd" value="#{biodataBean.password}" />
+							
+							<f:facet name="footer">
+					  			<p:commandButton ajax="false" action="#{biodataBean.login}" value="Login" style="margin:0"/>
+					  		</f:facet>
+						</p:panelGrid>
+						<p:tabView id="tabs" dynamic="true" cache="false" rendered="#{biodataBean.curUser != null}">
+							<p:tab id="view" title="Manage Bio-Data">
+								<p:commandButton ajax="false" action="#{biodataBean.logout}" value="Logout" style="margin:0"/>
+								<p:panelGrid columns="8" cellpadding="5" style="margin-bottom:10px;">
+									<h:outputLabel for="st" value="State: " />
+									<p:selectOneMenu id="st" value="#{biodataBean.state_id}">
+										<f:selectItem itemLabel="-- Any --" itemValue="0" />
+							  			<f:selectItems value="#{biodataBean.states}" var="it" itemLabel="#{it.name}" itemValue="#{it.id}" />
+							  		</p:selectOneMenu>
+							  		
+							  		<h:outputText value="" />
+							  		
+							  		<h:outputLabel for="sec" value="Sector: " />
+									<p:selectOneMenu id="sec" value="#{biodataBean.sector_id}">
+										<f:selectItem itemLabel="-- Any --" itemValue="0" />
+							  			<f:selectItems value="#{biodataBean.sectors}" var="it" itemLabel="#{it.name}" itemValue="#{it.id}" />
+							  		</p:selectOneMenu>
+							  		
+							  		<h:outputText value="" />
+							  		<h:outputText value="" />
+							  		<h:outputText value="" />
+							  		
+							  		<h:outputLabel for="fname" value="First name: " />
+							  		<p:inputText id="fname" value="#{biodataBean.fname}" />
+							  		
+							  		<h:outputText value="" />
+							  		
+							  		<h:outputLabel for="lname" value="Last name: " />
+							  		<p:inputText id="lname" value="#{biodataBean.lname}" />
+							  		
+							  		<h:outputText value="" />
+							  		
+							  		<h:outputLabel for="nis" value="NIS: " />
+							  		<p:inputText id="nis" value="#{biodataBean.nis}" />
+							  		
+							  		<h:outputLabel for="stdt" value="Start date: " />
+									<p:calendar id="stdt" value="#{biodataBean.start_dt}" showOn="button" />
+									
+									<h:outputText value="" />
+									
+									<h:outputLabel for="eddt" value="End date: " />
+									<p:calendar id="eddt" value="#{biodataBean.end_dt}" showOn="button" />
+									
+									<h:outputText value="" />
+									<h:outputText value="" />
+									<h:outputText value="" />
+									
+									<f:facet name="footer">
+							  			<p:commandButton ajax="false" action="#{biodataBean.search}" value="Search" icon="ui-icon-search" style="margin:0"/>
+							  		</f:facet>
+							  	</p:panelGrid>
+							  	<br/><br/>
+							  	<p:dataTable id="recordsTable" var="obj" value="#{biodataBean.biodataList}"
+									paginator="true" rows="50"
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="50,100,500" style="width:100%" resizableColumns="true">
+									<f:facet name="header">
+										#{biodataBean.biodataList.size()} record(s)
+									</f:facet>
+									
+									<p:column sortBy="#{obj.identificationcode}" headerText="Identification code" filterBy="#{obj.identificationcode}" filterMatchMode="contains">
+										<h:outputText value="#{obj.identificationcode}" />
+									</p:column>
+									<p:column sortBy="#{obj.lastname}" headerText="Last name" filterBy="#{obj.lastname}" filterMatchMode="contains">
+										<h:outputText value="#{obj.lastname}" />
+									</p:column>
+									<p:column sortBy="#{obj.firstname}" headerText="First name" filterBy="#{obj.firstname}" filterMatchMode="contains">
+										<h:outputText value="#{obj.firstname}" />
+									</p:column>
+									<p:column sortBy="#{obj.nis}" headerText="NIS" filterBy="#{obj.nis}" filterMatchMode="contains">
+										<h:outputText value="#{obj.nis}" />
+									</p:column>
+									<p:column headerText="Photo">
+										<img src="#{request.contextPath}/imageservlet/#{obj.id}:photo:#{biodataBean.randomNumber}" width="100" height="100" alt="photo" />
+									</p:column>
+									<p:column headerText="Fingerprint">
+										<img src="#{request.contextPath}/imageservlet/#{obj.id}:fingerprint:#{biodataBean.randomNumber}" width="100" height="100" alt="fingerprint" />
+									</p:column>
+									<p:column sortBy="#{obj.rank}" headerText="Rank" filterBy="#{obj.rank}" filterMatchMode="contains">
+										<h:outputText value="#{obj.rank}" />
+									</p:column>
+									<p:column sortBy="#{obj.crt_dt}" headerText="Date created" style="width: 10%">
+										<h:outputText value="#{obj.crt_dt}" />
+									</p:column>
+									<p:column headerText="" style="width: 6%">
+										<p:commandLink value="View" oncomplete="biodataDialog.show();" update=":form:display">
+											<f:setPropertyActionListener value="#{obj}" target="#{biodataBean.biodata}" />
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+						</p:tabView>
+					</p:outputPanel>
+				</td>
+			</tr>
+		</table>
+		
+		<p:dialog header="Bio Data" widgetVar="biodataDialog" resizable="false" id="biodataDlg" showEffect="fade" hideEffect="explode" modal="true">
+			<p:outputPanel id="display">
+				<p:scrollPanel style="width:700px;height:550px">
+				<h:panelGrid id="pnl" columns="1" style="width:100%;" columnClasses="topAligned">
+				<p:panelGrid columns="2" style="width:100%">
+				<p:panelGrid columns="2" style="width:100%">
+					<f:facet name="header">SECTION A: PERSONAL DATA</f:facet>
+					
+					<h:outputLabel value="Title: " />
+					<h:outputText value="#{biodataBean.biodata.title}" />
+					
+					<h:outputLabel value="Sur name: " />
+					<h:outputText value="#{biodataBean.biodata.lastname}" />
+					
+					<h:outputLabel value="First name: " />
+					<h:outputText value="#{biodataBean.biodata.firstname}" />
+					
+					<h:outputLabel value="Middle name: " />
+					<h:outputText value="#{biodataBean.biodata.middlename}" />
+					
+					<h:outputLabel value="Maiden name: " />
+					<h:outputText value="#{biodataBean.biodata.maidenname}" />
+					
+					<h:outputLabel value="Sex: " />
+					<h:outputText value="#{biodataBean.biodata.gender}" />
+					
+					<h:outputLabel value="Marital Status: " />
+					<h:outputText value="#{biodataBean.biodata.maritalStatus}" />
+					
+					<h:outputLabel value="Date of Birth: " />
+					<h:outputText value="#{biodataBean.biodata.yearOfBirth} - #{biodataBean.biodata.monthOfBirth} - #{biodataBean.biodata.dayOfBirth}" />
+					
+					<h:outputLabel value="Place of Birth: " />
+					<h:outputText value="#{biodataBean.biodata.placeOfBirth}" />
+					
+					<h:outputLabel value="LGA of Origin: " />
+					<h:outputText value="#{biodataBean.biodata.lgOfOrigin}" />
+					
+					<h:outputLabel value="Town: " />
+					<h:outputText value="#{biodataBean.biodata.town}" />
+					
+					<h:outputLabel value="Religion: " />
+					<h:outputText value="#{biodataBean.biodata.religion}" />
+					
+					<h:outputLabel value="State of Origin: " />
+					<h:outputText value="#{biodataBean.biodata.stateOfOrigin}" />
+					
+					<h:outputLabel value="Nationality: " />
+					<h:outputText value="#{biodataBean.biodata.nationality}" />
+					
+					<h:outputLabel value="Sector: " />
+					<h:outputText value="#{biodataBean.biodata.sector.name}" rendered="#{biodataBean.biodata.sector != null}" />
+					<h:outputText value="N/A" rendered="#{biodataBean.biodata.sector == null}" />
+					
+					<h:outputLabel value="State: " />
+					<h:outputText value="#{biodataBean.biodata.state.name}" rendered="#{biodataBean.biodata.state != null}" />
+					<h:outputText value="N/A" rendered="#{biodataBean.biodata.state == null}" />
+					
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:220px">
+					<h:outputLabel value="Photo: " />
+					<img src="#{request.contextPath}/imageservlet/#{biodataBean.biodata.id}:photo:#{biodataBean.randomNumber}" width="200" height="200" alt="photo" />
+					<h:outputLabel value="Fingerprint: " />
+					<img src="#{request.contextPath}/imageservlet/#{biodataBean.biodata.id}:fingerprint:#{biodataBean.randomNumber}" width="200" height="200" alt="fingerprint" />
+				</p:panelGrid>
+				</p:panelGrid>
+				<p:panelGrid columns="2" style="width:100%">
+					<f:facet name="header">SECTION B: CONTACT DETAILS</f:facet>
+					
+					<h:outputLabel value="Residential Address: " />
+					<h:outputText value="#{biodataBean.biodata.addr1}" />
+					<h:outputLabel value="" />
+					<h:outputText value="#{biodataBean.biodata.addr2}" />
+					
+					<h:outputLabel value="Home Town Address: " />
+					<h:outputText value="#{biodataBean.biodata.addrHm1}" />
+					<h:outputLabel value="" />
+					<h:outputText value="#{biodataBean.biodata.addrHm2}" />
+					
+					<h:outputLabel value="Mobile a.: " />
+					<h:outputText value="#{biodataBean.biodata.mobile1}" />
+					<h:outputLabel value="b.: " />
+					<h:outputText value="#{biodataBean.biodata.mobile2}" />
+					<h:outputLabel value="c.: " />
+					<h:outputText value="#{biodataBean.biodata.mobile3}" />
+					
+					<h:outputLabel value="Email: " />
+					<h:outputText value="#{biodataBean.biodata.email}" />
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2" style="width:100%">
+					<f:facet name="header">SECTION C: EMPLOYMENT DETAILS</f:facet>
+					
+					<h:outputLabel value="Grade Level / Step: " />
+					<h:outputText value="#{biodataBean.biodata.gradeLvl}" />
+					
+					<h:outputLabel value="Work Station: " />
+					<h:outputText value="#{biodataBean.biodata.workStation}" />
+					
+					<h:outputLabel value="NIS: " />
+					<h:outputText value="#{biodataBean.biodata.nis}" />
+					
+					<h:outputLabel value="Rank: " />
+					<h:outputText value="#{biodataBean.biodata.rank}" />
+					
+					<h:outputLabel value="Location of Station: " />
+					<h:outputText value="#{biodataBean.biodata.stationLocation}" />
+					
+					<h:outputLabel value="Profession: " />
+					<h:outputText value="#{biodataBean.biodata.profession}" />
+				</p:panelGrid>
+				
+				<p:panelGrid columns="1" style="width:100%">
+					<f:facet name="header">SECTION D: FAMILY DATA</f:facet>
+					<p:panelGrid columns="2" style="width:100%">
+						<f:facet name="header">RELATIVE INFORMATION</f:facet>
+					
+						<h:outputLabel value="Next of Kin: " />
+						<p:panelGrid columns="2" style="width:100%">
+							<h:outputLabel value="SURNAME: " />
+							<h:outputText value="#{biodataBean.biodata.nok_lastname}" />
+							
+							<h:outputLabel value="MIDDLE NAME: " />
+							<h:outputText value="#{biodataBean.biodata.nok_middlename}" />
+							
+							<h:outputLabel value="FIRST NAME: " />
+							<h:outputText value="#{biodataBean.biodata.nok_firstname}" />
+							
+							<h:outputLabel value="Relationship with Next of Kin: " />
+							<h:outputText value="#{biodataBean.biodata.nok_relatioship}" />
+							
+							<h:outputLabel value="Address: " />
+							<h:outputText value="#{biodataBean.biodata.nok_addr1}" />
+							
+							<h:outputLabel value="" />
+							<h:outputText value="#{biodataBean.biodata.nok_addr2}" />
+							
+							<h:outputLabel value="Phone Number: " />
+							<h:outputText value="#{biodataBean.biodata.nok_mobile}" />
+						</p:panelGrid>
+						
+						<h:outputLabel value="Number of Children: " />
+						<h:outputText value="#{biodataBean.biodata.noOfChildren}" />
+						
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">NAMES OF CHILDREN</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.child1_name}" />
+							<h:outputText value="b. #{biodataBean.biodata.child2_name}" />
+							<h:outputText value="c. #{biodataBean.biodata.child3_name}" />
+							<h:outputText value="d. #{biodataBean.biodata.child4_name}" />
+						</p:panelGrid>
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">DATE OF BIRTH</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.child1_dob}" />
+							<h:outputText value="b. #{biodataBean.biodata.child2_dob}" />
+							<h:outputText value="c. #{biodataBean.biodata.child3_dob}" />
+							<h:outputText value="d. #{biodataBean.biodata.child4_dob}" />
+						</p:panelGrid>
+					</p:panelGrid>
+					
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:100%">
+					<f:facet name="header">SECTION E: APPOINTMENT INFORMATION</f:facet>
+					<p:panelGrid columns="2" style="width:100%">
+					<h:outputLabel value="Date of 1st Appointment: (DD/MM/YYYY): " />
+					<h:outputText value="#{biodataBean.biodata.doa}" />
+					
+					<h:outputLabel value="Date of Confirmation: (DD/MM/YYYY): " />
+					<h:outputText value="#{biodataBean.biodata.doc}" />
+					
+					<h:outputLabel value="Method of Entry into Service: " />
+					<h:outputText value="#{biodataBean.biodata.moe}" />
+					</p:panelGrid>
+					<p:panelGrid columns="2" style="width:100%">
+						<f:facet name="header">Qualifiction on Entry in to Service with Dates</f:facet>
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">CERTIFICATE</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.cert1}" />
+							<h:outputText value="b. #{biodataBean.biodata.cert2}" />
+							<h:outputText value="c. #{biodataBean.biodata.cert3}" />
+						</p:panelGrid>
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">DATE</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.cert1_date}" />
+							<h:outputText value="b. #{biodataBean.biodata.cert2_date}" />
+							<h:outputText value="c. #{biodataBean.biodata.cert3_date}" />
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:panelGrid columns="2" style="width:100%">
+						<f:facet name="header">Other Qualifiction with Dates</f:facet>
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">CERTIFICATE</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.othercert1}" />
+							<h:outputText value="b. #{biodataBean.biodata.othercert2}" />
+							<h:outputText value="c. #{biodataBean.biodata.othercert3}" />
+						</p:panelGrid>
+						<p:panelGrid columns="1" style="width:100%">
+							<f:facet name="header">DATE</f:facet>
+							<h:outputText value="a. #{biodataBean.biodata.othercert1_date}" />
+							<h:outputText value="b. #{biodataBean.biodata.othercert2_date}" />
+							<h:outputText value="c. #{biodataBean.biodata.othercert3_date}" />
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:panelGrid columns="2" style="width:100%">
+						<h:outputLabel value="Rank on last promotion with Date: " />
+						<h:outputText value="#{biodataBean.biodata.rank_on_last_pro}" />
+						
+						<h:outputLabel value="Monthly Salary: " />
+						<h:outputText value="#{biodataBean.biodata.monthly}" />
+						
+						<h:outputLabel value="Annual Salary: " />
+						<h:outputText value="#{biodataBean.biodata.annual}" />
+						
+						<h:outputLabel value="Proposed Date of Retirement from Service: " />
+						<h:outputText value="#{biodataBean.biodata.proposedRetDate}" />
+					</p:panelGrid>
+					<p:panelGrid columns="2" style="width:100%">
+						<f:facet name="header">Authentication by Head of Unit</f:facet>
+						
+						<h:outputLabel value="Name/Rank in full: " />
+						<h:outputText value="#{biodataBean.biodata.authName}" />
+						
+						<h:outputLabel value="Date: " />
+						<h:outputText value="#{biodataBean.biodata.authDate}" />
+						
+						<h:outputLabel value="Remark: " />
+						<h:outputText value="#{biodataBean.biodata.authRemarks}" />
+						
+						<h:outputLabel value="Checked By: " />
+						<h:outputText value="#{biodataBean.biodata.checkedBy}" />
+					</p:panelGrid>
+				</p:panelGrid>
+				</h:panelGrid>
+				</p:scrollPanel>
+			</p:outputPanel>
+		</p:dialog>
+		
+		</h:form>
+	</h:body>
+</html>

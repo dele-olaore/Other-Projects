@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="home" icon="ui-icon-star"/>
+		<p:menuitem value="Search" outcome="search"/>
+	</p:breadCrumb>
+	
+	<center>
+	<p:panel id="tablePanel" style="width:95%">
+		<f:facet name="header">Search result</f:facet>
+	<p:dataTable id="dataTable" var="obj" value="#{propertyMBean.properties}"
+		paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15" style="width:100%" rendered="#{propertyMBean.properties.size() > 0}">
+		<f:facet name="header">
+			Found property(ies)
+		</f:facet>
+		
+		<p:column sortBy="#{obj.state}" headerText="State" filterBy="#{obj.state}" filterMatchMode="contains">
+			<h:outputText value="#{obj.state}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.lg}" headerText="Local Govt. Area" filterBy="#{obj.lg}" filterMatchMode="contains">
+			<h:outputText value="#{obj.lg}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.addr}" headerText="Address" filterBy="#{obj.addr}" filterMatchMode="contains">
+			<h:outputText value="#{obj.addr}" />
+		</p:column>
+		
+		<p:column sortBy="#{obj.type}" headerText="Type" filterBy="#{obj.type}" filterMatchMode="contains">
+			<h:outputText value="#{obj.type}" />
+		</p:column>
+		
+		<p:column headerText="Coordinates">
+			<h:outputText value="Lon: #{obj.lon}, Lat: #{obj.lat}" />
+		</p:column>
+		
+		<p:column headerText="Action">
+			<p:commandButton ajax="false" icon="ui-icon-search" value="View" action="#{propertyMBean.view2(obj.id)}" style="margin:0" />
+			<h:outputText value="  |  " />
+			<p:commandButton ajax="false" icon="ui-icon-search" value="Update" action="#{propertyMBean.view(obj.id)}" style="margin:0" />
+			<h:outputText value="  |  " />
+			<p:commandButton ajax="false" onclick="return confirm('Are you sure?');" icon="ui-icon-trash" value="Delete" action="#{propertyMBean.delete(obj.id)}" style="margin:0" />
+		</p:column>
+	</p:dataTable>
+	</p:panel>
+	</center>
+	
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	
+	<p:panelGrid columns="2" cellpadding="5" style="margin-bottom:10px;">
+		<f:facet name="header">Search details</f:facet>
+		
+  		<h:outputLabel for="st" value="State: " />
+  		<p:selectOneMenu id="st" value="#{propertyMBean.state}">
+  			<f:selectItem itemLabel="" itemValue="" />
+  			<f:selectItems value="#{dropdownMBean.states}" var="shp" itemLabel="#{shp.name}" itemValue="#{shp.name}" />
+  			<p:ajax update="lg" />
+  		</p:selectOneMenu>
+  		
+  		<h:outputLabel for="lg" value="Local Govt. Area: " />
+  		<p:selectOneMenu id="lg" value="#{propertyMBean.lg}">
+  			<f:selectItems value="#{dropdownMBean.getLgs(propertyMBean.state)}" var="shp" itemLabel="#{shp.name}" itemValue="#{shp.name}" />
+  		</p:selectOneMenu>
+  		
+  		<f:facet name="footer">
+  			<p:commandButton ajax="false" update="tablePanel,dataTable" action="#{propertyMBean.searchProperties}" value="#{message.searchAction}" icon="ui-icon-disk" style="margin:0"/>
+  		</f:facet>
+  	</p:panelGrid>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

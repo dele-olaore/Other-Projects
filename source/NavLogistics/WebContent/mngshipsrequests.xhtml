@@ -1,0 +1,380 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+	</p:breadCrumb>
+	
+	<p:tabView id="spStabView" dynamic="true" cache="true" rendered="#{(currentUser.role.name == 'Logistics' or currentUser.role.name == 'Store Personnel') and currentUser.role.type == 'Ship'}">
+		<p:tab id="spstb1" title="Ship's Pending requests (#{shipBean.spsPendingRequests.size()})">
+			<center>
+			<p:panel id="spspendingPanel" style="width:100%">
+			<p:dataTable id="spspendingTable" var="obj" value="#{shipBean.spsPendingRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Pending requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.approvalFlag}" headerText="Approved?">
+					<h:outputText value="Yes" rendered="#{obj.approvalFlag}" />
+					<h:outputText value="No" rendered="#{not obj.approvalFlag}" />
+				</p:column>
+				
+				<p:column headerText="Approved by">
+					<h:outputText value="#{obj.approvedBy.firstname} #{obj.approvedBy.lastname} on #{obj.approvalDate}" rendered="#{obj.approvalFlag}" />
+				</p:column>
+				
+				<p:column headerText="Issued?">
+					<h:outputText value="Yes" rendered="#{obj.issuedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.issuedDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Issued by">
+					<h:outputText value="#{obj.issuedBy.firstname} #{obj.issuedBy.lastname} on #{obj.issuedDate}" rendered="#{obj.issuedDate != null}" />
+				</p:column>
+				
+				<p:column headerText="Receive">
+					<p:commandLink action="#{shipBean.setSpsSelectRequest(obj.id)}" ajax="false" outcome="receiveitems" style="margin-right:20px;"
+						rendered="#{obj.issuedDate != null}">
+						<h:outputText value="Receive" />
+					</p:commandLink>
+					<h:outputText value="Not yet" rendered="#{obj.issuedDate == null}" />
+				</p:column>
+				
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			</p:panel>
+			</center>
+		</p:tab>
+		<p:tab id="spstb2" title="All Ship's requests">
+			<center>
+			<p:panel id="spsallPanel" style="width:100%">
+			<p:dataTable id="spsallTable" var="obj" value="#{shipBean.spsRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					All requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.approvalFlag}" headerText="Approved?">
+					<h:outputText value="Yes" rendered="#{obj.approvalFlag}" />
+					<h:outputText value="No" rendered="#{not obj.approvalFlag}" />
+				</p:column>
+				
+				<p:column headerText="Approved by">
+					<h:outputText value="#{obj.approvedBy.firstname} #{obj.approvedBy.lastname} on #{obj.approvalDate}" rendered="#{obj.approvalFlag}" />
+				</p:column>
+				
+				<p:column headerText="Issued?">
+					<h:outputText value="Yes" rendered="#{obj.issuedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.issuedDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Issued by">
+					<h:outputText value="#{obj.issuedBy.firstname} #{obj.issuedBy.lastname} on #{obj.issuedDate}" rendered="#{obj.issuedDate != null}" />
+				</p:column>
+				
+				<p:column headerText="Received?">
+					<h:outputText value="Yes" rendered="#{obj.receivedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.receivedDate == null}" />
+				</p:column>
+				
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			</p:panel>
+			</center>
+		</p:tab>
+	</p:tabView>
+	
+	<p:tabView id="sptabView" dynamic="true" cache="true" rendered="#{(currentUser.role.name == 'Logistics' or currentUser.role.name == 'Store Personnel') and currentUser.role.type != 'Ship'}">
+		<p:tab id="sptb1" title="My Pending requests (#{shipBean.spPendingRequests.size()})">
+			<center>
+			<p:panel id="sppendingPanel" style="width:80%">
+			<p:dataTable id="sppendingTable" var="obj" value="#{shipBean.spPendingRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Pending requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.ship.name}" headerText="Ship" filterBy="#{obj.ship.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.ship.name}" /> (<h:outputText value="#{obj.ship.code}" />)
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column headerText="Items">
+					<p:commandLink action="#{shipBean.setSelectRequest(obj.id, 'request_items')}" ajax="false" style="margin-right:20px;" outcome="request_items">
+						<h:outputText value="Items" />
+					</p:commandLink>
+				</p:column>
+				
+				<p:column sortBy="#{obj.approvedBy.firstname}" headerText="Approved by">
+					<h:outputText value="#{obj.approvedBy.firstname} #{obj.approvedBy.lastname} on #{obj.approvalDate}" />
+				</p:column>
+				
+				<p:column headerText="Attend to">
+					<p:commandLink action="#{shipBean.setSpSelectRequest(obj.id)}" ajax="false" outcome="issueitems" style="margin-right:20px;">
+						<h:outputText value="Attend To" />
+					</p:commandLink>
+				</p:column>
+				
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			</p:panel>
+			</center>
+		</p:tab>
+		<p:tab id="sptb2" title="All requests">
+			<center>
+			<p:panel id="spallPanel" style="width:95%">
+			<div style="width:100%;overflow:auto">
+			<p:dataTable id="spallTable" var="obj" value="#{shipBean.spRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					All my requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.ship.name}" headerText="Ship" filterBy="#{obj.ship.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.ship.name}" /> (<h:outputText value="#{obj.ship.code}" />)
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.approvedBy.firstname}" headerText="Approved by">
+					<h:outputText value="#{obj.approvedBy.firstname} #{obj.approvedBy.lastname} on #{obj.approvalDate}" />
+				</p:column>
+				
+				<p:column headerText="Attended to?">
+					<h:outputText value="Yes on #{obj.issuedDate}" rendered="#{obj.issuedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.issuedDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Received?">
+					<h:outputText value="Yes on #{obj.receivedDate}" rendered="#{obj.receivedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.receivedDate == null}" />
+				</p:column>
+				
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+				
+			</p:dataTable>
+			</div>
+			</p:panel>
+			</center>
+		</p:tab>
+	</p:tabView>
+	
+	<p:tabView id="foctabView" dynamic="true" cache="true" rendered="#{currentUser.role.name == 'FOC'}">
+		<p:tab id="tb1" title="My Pending requests (#{shipBean.focPendingRequests.size()})">
+			<center>
+			<p:panel id="focpendingPanel" style="width:80%">
+			<p:dataTable id="focpendingTable" var="obj" value="#{shipBean.focPendingRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					Pending requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.ship.name}" headerText="Ship" filterBy="#{obj.ship.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.ship.name}" /> (<h:outputText value="#{obj.ship.code}" />)
+				</p:column>
+				
+				<p:column sortBy="#{obj.equipment}" headerText="Equipment">
+					<h:outputText value="#{obj.equipment}" />
+				</p:column>
+				<p:column sortBy="#{obj.selno}" headerText="Sel No">
+					<h:outputText value="#{obj.selno}" />
+				</p:column>
+				<p:column sortBy="#{obj.issno}" headerText="ISS No">
+					<h:outputText value="#{obj.issno}" />
+				</p:column>
+				<p:column sortBy="#{obj.serialno}" headerText="Serial No">
+					<h:outputText value="#{obj.serialno}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column headerText="Items">
+					<p:commandLink action="#{shipBean.setSelectRequest(obj.id, 'request_items')}" ajax="false" style="margin-right:20px;" outcome="request_items">
+						<h:outputText value="Items" />
+					</p:commandLink>
+				</p:column>
+				
+				<p:column headerText="Attend to">
+					<p:commandLink action="#{shipBean.setSelectRequest(obj.id)}" ajax="true" style="margin-right:20px;" onclick="dlg2.show();">
+						<h:outputText value="Attend To" />
+					</p:commandLink>
+				</p:column>
+			
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			</p:panel>
+			</center>
+		</p:tab>
+		<p:tab id="tb2" title="All requests">
+			<center>
+			<p:panel id="focallPanel" style="width:95%">
+			<p:dataTable id="focallTable" var="obj" value="#{shipBean.focRequests}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" style="width:100%">
+				<f:facet name="header">
+					All my requests
+				</f:facet>
+				
+				<p:column sortBy="#{obj.date}" headerText="Date">
+					<h:outputText value="#{obj.date}" />
+				</p:column>
+				
+				<p:column sortBy="#{obj.ship.name}" headerText="Ship" filterBy="#{obj.ship.name}" filterMatchMode="contains">
+					<h:outputText value="#{obj.ship.name}" /> (<h:outputText value="#{obj.ship.code}" />)
+				</p:column>
+				
+				<p:column sortBy="#{obj.requestedBy.firstname}" headerText="Requested by">
+					<h:outputText value="#{obj.requestedBy.firstname} #{obj.requestedBy.lastname}" />
+				</p:column>
+				
+				<p:column headerText="Items">
+					<p:commandLink action="#{shipBean.setSelectRequest(obj.id, 'request_items')}" ajax="false" style="margin-right:20px;" outcome="request_items">
+						<h:outputText value="Items" />
+					</p:commandLink>
+				</p:column>
+				
+				<p:column headerText="Attended to?">
+					<h:outputText value="Yes on #{obj.approvalDate}" rendered="#{obj.approvalDate != null}" />
+					<h:outputText value="No" rendered="#{obj.approvalDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Status">
+					<h:outputText value="Approved" rendered="#{obj.approvalFlag and obj.approvalDate != null}" />
+					<h:outputText value="Dis-approved" rendered="#{not obj.approvalFlag and obj.approvalDate != null}" />
+					<h:outputText value="Pending" rendered="#{obj.approvalDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Forwarded to">
+					<h:outputText value="#{obj.issuedBy.firstname} #{obj.issuedBy.lastname}" rendered="#{obj.issuedBy != null}" />
+				</p:column>
+				
+				<p:column headerText="Issued?">
+					<h:outputText value="Yes on #{obj.issuedDate}" rendered="#{obj.issuedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.issuedDate == null}" />
+				</p:column>
+				
+				<p:column headerText="Received?">
+					<h:outputText value="Yes on #{obj.receivedDate}" rendered="#{obj.receivedDate != null}" />
+					<h:outputText value="No" rendered="#{obj.receivedDate == null}" />
+				</p:column>
+				
+				<p:column headerTest="Form">
+					<p:commandLink action="#{shipBean.pdfform(obj.id)}" ajax="false" outcome="shiprequest_table" style="margin-right:20px;">
+						<h:outputText value="Form" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			</p:panel>
+			</center>
+		</p:tab>
+	</p:tabView>
+	
+	<p:dialog id="approveDialog" header="Attend to request" widgetVar="dlg2" modal="true" dynamic="true">  
+		<p:panelGrid id="attendPanel" columns="2" cellpadding="5" style="margin-bottom:10px;" dynamic="true">
+		<f:facet name="header"></f:facet>
+		
+			<h:outputLabel for="reqflag" value="#{bundles.messages.approveLabel}:" />
+			<p:selectBooleanCheckbox id="reqflag" value="#{shipBean.shipRequest.approvalFlag}">
+				<p:ajax update="reqissuerPanel" />
+			</p:selectBooleanCheckbox>
+			
+			<h:outputLabel for="reqremark" value="#{bundles.messages.remarkLabel}:" />
+	  		<p:panelGrid columns="1" cellpadding="1" style="margin-bottom:10px;">
+	  		<p:inputTextarea id="reqremark" value="#{shipBean.shipRequest.approvalRemark}" rows="5" cols="30" counter="counter" maxlength="225" counterTemplate="{0} characters remaining." autoResize="false"/>
+	  		<h:outputText id="counter" />
+	  		</p:panelGrid>
+	  		
+	  		<h:outputLabel for="reqissuer" value="#{bundles.messages.issuerLabel}:" />
+	  		<p:panelGrid columns="1" id="reqissuerPanel" cellpadding="1" style="margin-bottom:10px;">
+	  		<p:selectOneMenu id="reqissuer" value="#{shipBean.issuer_username}" rendered="#{shipBean.shipRequest.approvalFlag}">
+	  			<f:selectItems value="#{dropdownBean.issuers}" />
+	  		</p:selectOneMenu>
+	  		<h:outputText value="No issuer needed for dis-approval" rendered="#{not shipBean.shipRequest.approvalFlag}" />
+	  		</p:panelGrid>
+	  		
+	  		<f:facet name="footer">
+	  			<p:commandButton ajax="false" outcome="mngshipsrequests" update="focpendingPanel,focpendingTable,approveDialog" action="#{shipBean.SaveApproval}" value="#{bundles.messages.saveAction}" icon="ui-icon-disk" style="margin:0"/>
+	  		</f:facet>
+		</p:panelGrid>
+	</p:dialog>
+	</h:form>
+</ui:define>
+</ui:composition>

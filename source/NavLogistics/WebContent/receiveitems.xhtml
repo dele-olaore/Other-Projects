@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:menuitem value="Receive Items" outcome="receiveitems" />
+	</p:breadCrumb>
+	
+	<center>
+		<p:panel id="receivingItemsPanel" style="width:100%">
+		<p:dataTable id="receivingItemsTable" var="obj" value="#{shipBean.receiveSpareparts}"
+			paginator="true" rows="15"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15" style="width:100%">
+			<f:facet name="header">
+				Receiving items
+			</f:facet>
+			
+			<p:column headerText="">
+				<p:selectBooleanCheckbox value="#{obj.active}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.item.name}" headerText="Item">
+				<h:outputText value="#{obj.item.name}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.serial_number}" headerText="Serial No.">
+				<h:outputText value="#{obj.serial_number}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.customized_number}" headerText="Customized No.">
+				<h:outputText value="#{obj.customized_number}" />
+			</p:column>
+			
+		</p:dataTable>
+			<f:facet name="footer">
+	  			<p:commandButton ajax="false" outcome="mngshipsrequests" action="#{shipBean.SaveRequestReceived}" value="#{bundles.messages.doneAction}" icon="ui-icon-check" style="margin:0"/>
+	  		</f:facet>
+		</p:panel>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

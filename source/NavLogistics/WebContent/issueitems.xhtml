@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	<h:form>
+	<p:breadCrumb>
+		<p:menuitem value="Dashboard" outcome="dashboard" icon="ui-icon-star"/>
+		<p:menuitem value="Manage Requests" action="#{shipBean.movetofocpending}" outcome="mngshipsrequests" />
+		<p:menuitem value="Issue Items for: #{shipBean.shipRequest.ship.name} (#{shipBean.shipRequest.ship.code})" outcome="issueitems" />
+	</p:breadCrumb>
+
+	<center>
+		<p:panel id="reqitemsPanel" style="width:80%">
+		<p:dataTable id="reqitemsTable" var="obj" value="#{shipBean.selRequestItems}"
+			paginator="true" rows="15"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15" style="width:100%">
+			<f:facet name="header">
+				Items in request
+			</f:facet>
+			
+			<p:column sortBy="#{obj.item.name}" headerText="Item">
+				<h:outputText value="#{obj.item.name}" />
+			</p:column>
+			
+			<p:column sortBy="#{obj.item.name}" headerText="Item">
+				<h:outputText value="#{obj.requestedAmount}" />
+			</p:column>
+			
+			<p:column headerText="Items to Issue">
+				<p:commandLink action="#{shipBean.movetospareissue(obj.id)}" ajax="false" outcome="issuespareparts" style="margin-right:20px;">
+					<h:outputText value="Items" />
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Issued Count">
+				<h:outputText value="#{obj.issuedAmount}" />
+			</p:column>
+			
+		</p:dataTable>
+			<f:facet name="footer">
+	  			<p:commandButton ajax="false" outcome="mngshipsrequests" action="#{shipBean.SaveRequestIssued}" value="#{bundles.messages.doneAction}" icon="ui-icon-check" style="margin:0"/>
+	  		</f:facet>
+		</p:panel>
+	</center>
+	
+	</h:form>
+</ui:define>
+</ui:composition>

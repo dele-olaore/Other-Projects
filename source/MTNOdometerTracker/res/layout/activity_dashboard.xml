@@ -1,0 +1,198 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DashboardActivity" >
+
+    <!-- syncing progress -->
+
+    <LinearLayout
+        android:id="@+id/sync_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/sync_status_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Syncing data..."
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+	<LinearLayout android:id="@+id/dashboardLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin"
+	    tools:context=".DashboardActivity" >
+	
+	    <ScrollView
+	    android:id="@+id/scrollView1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1" >
+        
+	    <LinearLayout android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical" >
+	    
+	    <TextView
+	        android:id="@+id/errorTV"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Odometer and Purchase details"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+		<LinearLayout android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical" >
+	    	
+		    <TextView
+		            android:id="@+id/initFuelLvl"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Initial Fuel Level" />
+	        <EditText
+	            android:id="@+id/initFuelLvlText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/quantity"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Quantity" />
+	        <EditText
+	            android:id="@+id/quantityText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/finalFuelLvl"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Final Fuel Level" />
+	        <EditText
+	            android:id="@+id/finalFuelLvlText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/odometer"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Odometer" />
+	        <EditText
+	            android:id="@+id/odometerText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/fuelRate"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Fuel Rate" />
+	        <EditText
+	            android:id="@+id/fuelRateText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/cost"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Cost" />
+	        <EditText
+	            android:id="@+id/costText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="numberDecimal" />
+	        
+	        <TextView
+		            android:id="@+id/refNm"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Reference Number" />
+	        <EditText
+	            android:id="@+id/refNumText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10" />
+	        
+	        <TextView
+		            android:id="@+id/location"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left"
+		            android:text="Location" />
+	        <EditText
+	            android:id="@+id/locationText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10" />
+		    
+		</LinearLayout>
+		
+		</LinearLayout>
+		
+		</ScrollView>
+		
+	    <LinearLayout android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="horizontal" >
+	    
+	    <Button
+		    android:id="@+id/signOutBtn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="left"
+		    android:layout_weight="0"
+		    android:text="Sign Out" />
+		
+	    <Space
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" />
+	    
+		<Button
+		    android:id="@+id/saveBtn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right"
+		    android:layout_weight="0"
+		    android:text="Save" />
+		
+	</LinearLayout>
+	
+	</LinearLayout>
+</merge>

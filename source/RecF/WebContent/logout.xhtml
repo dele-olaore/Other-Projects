@@ -1,0 +1,23 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/layout/layout.xhtml">
+<ui:define name="content">
+	
+<div class="wrapper">
+	<span class="errors">
+       <h:messages errorClass="error" styleClass="messages" id="messages" globalOnly="true"/>
+    </span>
+    <div class="errorPage">
+        <h2 class="red aligncenter weAreOff"><span>Thank you, you have successfully signed </span></h2>
+        <h1 style="align:center" align="center">out</h1>
+        <p>Please click on the link below to sign in again.</p>
+        <div class="backToDash"><a href="index.seam" title="" class="greyishBtn button">Home</a></div>
+    </div>
+</div>
+	
+</ui:define>
+</ui:composition>
