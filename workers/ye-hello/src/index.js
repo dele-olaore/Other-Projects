@@ -10,6 +10,10 @@ export default {
       });
     }
 
+    if (request.method === "GET" && url.pathname === "/health") {
+      return Response.json({ ok: true, environment: env.ENVIRONMENT });
+    }
+
     return new Response("Not Found", { status: 404 });
   },
 };
