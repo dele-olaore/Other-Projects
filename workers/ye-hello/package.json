@@ -1,0 +1,15 @@
+{
+  "name": "ye-hello",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "node --test",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:production": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
