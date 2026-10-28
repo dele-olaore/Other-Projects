@@ -17,8 +17,19 @@ test("GET / returns name, environment and ref as JSON", async () => {
   });
 });
 
+test("GET /health returns ok and environment as JSON", async () => {
+  const res = await call("/health");
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-type"), /application\/json/);
+  assert.deepEqual(await res.json(), { ok: true, environment: "staging" });
+});
+
+test("non-GET on /health returns 404", async () => {
+  assert.equal((await call("/health", "POST")).status, 404);
+});
+
 test("any other path returns 404", async () => {
-  for (const path of ["/foo", "/index.html", "/health"]) {
+  for (const path of ["/foo", "/index.html", "/health/"]) {
     const res = await call(path);
     assert.equal(res.status, 404, path);
   }
