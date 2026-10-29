@@ -24,6 +24,21 @@ test("GET /health returns ok and environment as JSON", async () => {
   assert.deepEqual(await res.json(), { ok: true, environment: "staging" });
 });
 
+test("GET /version returns name, ref and environment as JSON", async () => {
+  const res = await call("/version");
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-type"), /application\/json/);
+  assert.deepEqual(await res.json(), {
+    name: "ye-hello",
+    ref: "abc123",
+    environment: "staging",
+  });
+});
+
+test("non-GET on /version returns 404", async () => {
+  assert.equal((await call("/version", "POST")).status, 404);
+});
+
 test("non-GET on /health returns 404", async () => {
   assert.equal((await call("/health", "POST")).status, 404);
 });

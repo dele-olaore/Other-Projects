@@ -14,6 +14,14 @@ export default {
       return Response.json({ ok: true, environment: env.ENVIRONMENT });
     }
 
+    if (request.method === "GET" && url.pathname === "/version") {
+      return Response.json({
+        name: "ye-hello",
+        ref: env.BUILD_REF,
+        environment: env.ENVIRONMENT,
+      });
+    }
+
     return new Response("Not Found", { status: 404 });
   },
 };

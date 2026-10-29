@@ -4,6 +4,7 @@ A tiny, throwaway Cloudflare Worker used to test the delivery pipeline.
 
 - `GET /` returns `{"name": "ye-hello", "environment": "<ENVIRONMENT>", "ref": "<BUILD_REF>"}`
 - `GET /health` returns `{"ok": true, "environment": "<ENVIRONMENT>"}`
+- `GET /version` returns `{"name": "ye-hello", "ref": "<BUILD_REF>", "environment": "<ENVIRONMENT>"}`
 - Any other path returns `404`.
 
 No dependencies besides `wrangler` (dev), no secrets, no routes or custom domains (workers.dev only).
